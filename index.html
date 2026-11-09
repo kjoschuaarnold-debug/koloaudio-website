@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KOLO AUDIO – KOLO GRIT, free multiband compressor</title>
+<meta name="description" content="KOLO GRIT: a free one-knob multiband compressor by KOLO AUDIO.">
+<link rel="icon" href="bilder/favicon_64.png">
+<link rel="stylesheet" href="stil.css">
+<script src="config.js" defer></script>
+<script src="seite.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#grit">Skip to content</a>
+
+<header class="kopf">
+  <a class="kopf-zeichen" href="#grit" aria-label="KOLO AUDIO – start"><img src="bilder/kolo_zeichen_hell.svg" alt="KOLO AUDIO" width="34" height="34"></a>
+  <button class="kopf-menu" aria-expanded="false" aria-controls="menu" aria-label="Menu"><span></span><span></span><span></span></button>
+</header>
+
+<nav id="menu" class="menu" hidden>
+  <ul>
+    <li><a href="#grit" data-t="menu_grit">KOLO GRIT</a></li>
+    <li><a href="#neu" data-t="menu_next">New plugin</a></li>
+    <li><a href="#ueber" data-t="menu_about">About</a></li>
+  </ul>
+</nav>
+
+<main>
+  <!-- Start: KOLO GRIT, ganzes Plugin mit fetter Überschrift, gratis gegen E-Mail -->
+  <section id="grit" class="band band-grit start-grit">
+    <picture class="hg">
+      <source type="image/webp" srcset="bilder/band_leiste_1200.webp 1200w, bilder/band_leiste_2400.webp 2400w" sizes="100vw">
+      <img src="bilder/band_leiste_1200.jpg" alt="" aria-hidden="true">
+    </picture>
+    <div class="grit-raster">
+      <picture class="plugin plugin-grit">
+        <source type="image/webp" srcset="bilder/plugin_kologrit_470.webp 470w, bilder/plugin_kologrit_940.webp 940w" sizes="(max-width: 800px) 80vw, 420px">
+        <img src="bilder/plugin_kologrit_470.jpg" width="470" height="700" alt="KOLO GRIT plugin interface: one DEPTH knob with input and output meters">
+      </picture>
+      <div class="grit-text">
+        <p class="frei">FREE</p>
+        <h1 class="name name-gross" data-t="g_name">KOLO GRIT</h1>
+        <p class="kategorie" data-t="g_cat">A free one-knob multiband compressor</p>
+        <p data-t="g_1">Tuned on the inside so it always sounds musical.</p>
+        <p data-t="g_2">On top, there's GRIT mode for when you want to push it all the way.</p>
+        <form class="mail" data-grit-form>
+          <label><span class="vh" data-t="g_mail_ph">Your email</span><input type="email" required autocomplete="email" data-t-ph="g_mail_ph" placeholder="Your email"></label>
+          <button class="knopf knopf-gold" type="submit" data-t="g_get">Get KOLO GRIT free</button>
+        </form>
+        <p class="klein" data-t="g_note">We send the download link to this address.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Neues Plugin am 15.12.: Teaser ohne Namen und ohne Bild, Benachrichtigung zum Start -->
+  <section id="neu" class="flaeche flaeche-teaser teaser">
+    <picture class="hg">
+      <source type="image/webp" srcset="bilder/start_holz_1200.webp 1200w, bilder/start_holz_2400.webp 2400w" sizes="100vw">
+      <img src="bilder/start_holz_1200.jpg" alt="" aria-hidden="true" loading="lazy">
+    </picture>
+    <div class="inhalt schmal">
+      <p class="datum" data-t="t_datum">NEW PLUGIN · 15.12.2026</p>
+      <h2 class="titel" data-t="t_head">Something new is coming.</h2>
+      <p data-t="t_1">Our next plugin arrives on 15 December. Leave your email and we'll let you know on launch day.</p>
+      <form class="mail" data-news-form>
+        <label><span class="vh" data-t="t_ph">Your email</span><input type="email" required autocomplete="email" data-t-ph="t_ph" placeholder="Your email"></label>
+        <button class="knopf knopf-leise" type="submit" data-t="t_btn">Get notified at launch</button>
+      </form>
+      <p class="klein" data-t="t_note"></p>
+    </div>
+  </section>
+
+  <!-- Über KOLO AUDIO -->
+  <section id="ueber" class="flaeche flaeche-ueber">
+    <picture class="hg">
+      <source type="image/webp" srcset="bilder/ueber_monstera_1200.webp 1200w, bilder/ueber_monstera_2400.webp 2400w" sizes="100vw">
+      <img src="bilder/ueber_monstera_1200.jpg" alt="" aria-hidden="true" loading="lazy">
+    </picture>
+    <div class="inhalt schmal">
+      <h2 class="titel" data-t="a_head">About KOLO AUDIO</h2>
+      <p data-t="a_1"></p>
+      <p class="unterschrift" data-t="a_sig"></p>
+    </div>
+  </section>
+
+  <!-- Formate -->
+  <section id="formate" class="flaeche flaeche-ruhig formate">
+    <div class="inhalt">
+      <h2 class="titel klein-titel" data-t="f_head">Formats</h2>
+      <ul class="format-liste"><li data-t="f_1"></li><li data-t="f_2"></li><li data-t="f_3"></li><li data-t="f_4"></li></ul>
+    </div>
+  </section>
+</main>
+
+<footer class="fuss">
+  <img src="bilder/kolo_zeichen_hell.svg" alt="" width="28" height="28" aria-hidden="true">
+  <nav class="fuss-links" aria-label="Legal">
+    <a href="impressum.html" data-t="legal_imprint">Legal notice</a>
+    <a href="datenschutz.html" data-t="legal_privacy">Privacy</a>
+    <a href="mailto:hello@koloaudio.com" data-t="legal_contact">Contact</a>
+  </nav>
+  <p class="klein" data-t="ls_note">Sales are handled by Lemon Squeezy (merchant of record).</p>
+  <p class="klein" data-t="copyright">© 2026 KOLO AUDIO. All rights reserved.</p>
+</footer>
+<div class="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
