@@ -657,7 +657,7 @@ body.unterseite #inhalt :is(.h-claim, .h-gclaim, .h-datum, .h-mail button, .h-ka
 .h-text .h-mail [data-moonbase-message]{color:#26292e;text-shadow:0 .5px 0 rgba(255,255,255,.22)}
 .held-produkt-k .h-mail [data-moonbase-message],.held-start-k .h-mail [data-moonbase-message]{font-size:11px;opacity:.8}
 .held-grit:not(.held-ohnekopf) .h-mail [data-moonbase-message]{font-size:13px;opacity:.7}
-.h-mail[data-moonbase-state="subscribed"] .h-mail-felder,.h-mail[data-moonbase-state="confirmation_sent"] .h-mail-felder{display:none}
+.h-mail[data-moonbase-state="subscribed"] .h-mail-felder,.h-mail[data-moonbase-state="confirmation_sent"] .h-mail-felder{display:none !important}
 
 /* ===== 239 – Fehlerkorrektur Handy/Tablet: Breiten aus 239c/239f nur ab 1024 px, darunter Breite wie Stand 238 ===== */
 @media (min-width: 1024px) {
@@ -807,3 +807,14 @@ body.unterseite { --wk: min(100vw, calc((100svh - var(--kopf)) / .8364)); }
   .held-grit:not(.held-ohnekopf) .h-gclaim { font-size: 27px !important; }
   .held-grit:not(.held-ohnekopf) .h-datum { font-size: 16px !important; }
 }
+
+/* 242c (Kim 17:00): E-Mail-Feld + Knopf als EIN Kasten – gleiche Höhe, eine Rundung außen, kein Bruch */
+.h-mail .h-mail-felder { display: flex !important; align-items: stretch !important; gap: 0 !important; height: 52px;
+  border: 1px solid rgba(38,41,46,.28) !important; border-radius: 6px !important; overflow: hidden !important;
+  background: var(--feld-hell) !important; box-shadow: 0 6px 16px rgba(0,0,0,.16) !important;
+  -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+.h-mail .h-mail-felder input { flex: 1 1 auto; height: auto !important; margin: 0 !important; border: 0 !important; border-radius: 0 !important;
+  background: transparent !important; box-shadow: none !important; outline: none; }
+.h-mail .h-mail-felder button { flex: 0 0 auto; height: auto !important; margin: 0 !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; }
+.h-mail .h-mail-felder:focus-within { border-color: rgba(38,41,46,.65) !important; box-shadow: 0 0 0 3px rgba(236,216,160,.45), 0 6px 16px rgba(0,0,0,.16) !important; }
+@media (max-width: 600px) { .h-mail .h-mail-felder { height: 54px; } }
