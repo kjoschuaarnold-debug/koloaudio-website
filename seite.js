@@ -165,6 +165,7 @@
     if (aktiv === Z) aktiv = null;
   }
   function starte(Z) {
+    if (navigator.audioSession) navigator.audioSession.type = 'playback';   // 242: iPhone spielt auch im Lautlos-Modus
     if (!ctx) ctx = new AC();
     if (ctx.state === "suspended") ctx.resume();
     if (aktiv && aktiv !== Z) anhalten(aktiv, true);

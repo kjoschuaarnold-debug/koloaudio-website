@@ -45,7 +45,7 @@ a { color: inherit; }
 .menu { position: fixed; inset: var(--kopf) 0 0 0; background: rgba(14, 12, 10, .96); z-index: 49; display: flex; justify-content: center; align-items: center; }
 .menu[hidden] { display: none; }
 .menu ul { list-style: none; margin: 0; padding: 0; text-align: center; }
-.menu a { display: block; font: 26px/1 var(--titel); letter-spacing: .12em; padding: 14px 0; text-decoration: none; }
+.menu a { display: block; font: 20px/1 var(--titel); letter-spacing: .12em; padding: 14px 0; text-decoration: none; }
 .menu a:hover { color: var(--gelb); }
 
 section { position: relative; overflow: hidden; }
@@ -714,3 +714,96 @@ body.unterseite #inhalt :is(.h-claim, .h-gclaim, .h-datum, .h-mail button, .h-ka
 .ptext .psys .pklein{max-width:none}
 .ptext p,.ptext dd{text-wrap:pretty}
 .ptext .ptrio p,.ptext.gritgrund .gtx p{text-wrap:balance}
+
+/* ===== 242 (Claude, 25.11.) – vor dem Creator-Versand ===== */
+
+/* 20 Haupt-Knöpfe: dunkles Anthrazit mit heller Schrift (stärkster Kontrast auf Gold, Creme und Beton), E-Mail-Feld hell */
+:root { --cta: #1c1e22; --cta-hell: #2c2f35; --cta-text: #f4eee4; --feld-hell: rgba(250,246,238,.82); }
+.held-start-k .h-mail button,
+.held-produkt-k .h-mail button,
+.held-grit:not(.held-ohnekopf) .h-mail button,
+.held-ohnekopf .h-kauf.h-silber {
+  background: linear-gradient(180deg, #2c2f35 0%, #1a1c20 100%) !important; color: var(--cta-text) !important; border: 0 !important;
+  box-shadow: 0 6px 16px rgba(0,0,0,.30), 0 1px 3px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.12) !important;
+}
+.held-start-k .h-mail button:hover, .held-produkt-k .h-mail button:hover,
+.held-grit:not(.held-ohnekopf) .h-mail button:hover, .held-ohnekopf .h-kauf.h-silber:hover { background: linear-gradient(180deg, #383c43 0%, #24272c 100%) !important; }
+/* Feld hell, damit Feld + Knopf als Einheit lesbar sind */
+.held-start-k .h-mail input, .held-produkt-k .h-mail input { background: var(--feld-hell) !important; color: #1d1f24 !important; border-color: rgba(38,41,46,.25) !important;
+  -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+.held-start-k .h-mail input::placeholder, .held-produkt-k .h-mail input::placeholder { color: rgba(29,31,36,.55); }
+.held-produkt-k .h-mail-felder { background: transparent !important; border-color: rgba(38,41,46,.25) !important; }
+/* DISCOVER KOLORIT ist Nebenweg: ruhiger Rahmen statt zweitem vollen Knopf */
+.held-start-k .h-kauf { background: rgba(22,18,14,.38); color: #f4eee4; border: 1px solid rgba(244,238,228,.7); box-shadow: none;
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+
+/* 19 Kopf: Hauptpunkte als Menü (ab 901 px sichtbar), Fuß nur noch eine Zeile */
+.kopf-nav { display: none; }
+@media (min-width: 901px) {
+  .kopf-nav { display: flex; gap: 34px; position: absolute; left: 50%; transform: translateX(-50%); }
+  .kopf-nav a { font: 400 11px/1 Michroma, sans-serif; letter-spacing: .16em; color: #ece6dc; text-decoration: none; opacity: .85; }
+  .kopf-nav a:hover { opacity: 1; color: #ecd8a0; }
+  .kopf-menu { display: none; }
+}
+.fuss242 { gap: 12px; padding: 30px 24px 30px; }
+.fuss-logo-link { display: block; }
+.fuss-zeile { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 26px; font-size: 14px; }
+.fuss-zeile a { color: #cfc7ba; text-decoration: none; }
+.fuss-zeile a:hover { color: #ecd8a0; }
+
+/* 1 Plugin auf den Produktseiten so groß wie auf der Startseite (eine Regel) */
+body.unterseite { --wk: min(100vw, calc((100svh - var(--kopf)) / .8364)); }
+.held-produkt-k .held-rahmen { width: min(100%, var(--wk)); }
+@media (min-width: 601px) {
+  .held-produkt-k .h-plug { width: 100%; }
+  .held-produkt-k .h-claim { margin: 2.2% 0 calc(.35em + 1.6%) !important; }
+  .held-grit:not(.held-ohnekopf) .h-plug { width: calc(var(--wk) * .34576); max-width: none; }
+}
+
+/* 3 Hörbeispiele: DRY | KOLORIT als erkennbarer Schalter */
+.hl-ab { gap: 0; border: 1px solid rgba(38,41,46,.45); border-radius: 999px; padding: 2px; }
+.hl-ab .hl-trenn { display: none; }
+.hl-ab button { padding: 6px 12px; border-radius: 999px; }
+.hl-ab button.aktiv { background: #26292e; color: #f4eee4; }
+
+
+/* 4 Texte unter SATURATE / NOISE / TILT mittig unter ihrem Panel */
+.ptext .ptrio > div { text-align: center; }
+.ptext .ptrio p { text-align: center; margin: 0 auto; }
+
+/* 5 Systemanforderungen: am Desktop linksbündig wie bisher (Kim 16:18: mittig wirkt unaufgeräumt), auf dem Handy mittig (Punkt 12) */
+
+/* 6 GRIT: Depth und Grit gleich gebaut */
+@media (min-width: 1024px) {
+  .ptext.gritgrund .gtx-haupt p { max-width: 340px; text-wrap: balance; }   /* beide Texte drei gleich lange Zeilen */
+}
+
+/* 18 Beton-Hintergrund: Fotokante nie sichtbar (deckt immer die ganze Fläche) */
+/* Foto hat oben eine schräge Mauerkante (oberste ~18 %): auf dem Handy unten ansetzen und so groß ziehen, dass sie nie ins Bild kommt */
+@media (max-width: 600px) { .held-grit .held-foto { background-size: auto 135% !important; background-position: 50% 100% !important; } }
+
+/* 12, 13, 17 Handy (bis 600 px) */
+@media (max-width: 600px) {
+  /* 12 alles mittig */
+  .ptext .pseite .pl, .ptext .pseite .pr, .ptext .ptrio > div, .ptext .ptrio p,
+  .ptext .pliste dt, .ptext .pliste dd, .ptext .psys, .ptext.gritgrund .gtx-haupt, .ptext.gritgrund .gtx-neben > div { text-align: center; }
+  .ptext .pseite .pl, .ptext .pseite .pr { justify-self: center; }
+  .ptext .pliste > div { gap: 6px; }
+  .ptext .psys2 { grid-template-columns: 1fr; justify-items: center; }
+  .ptext .psys .pklein { margin: 0 auto; }
+  .ptext.gritgrund .gtx-haupt p { margin: 0 auto; }
+  /* 13 E-Mail-Feld und Knopf als eine Einheit */
+  .h-mail-felder { gap: 0 !important; border: 1px solid rgba(38,41,46,.3) !important; border-radius: 3px; overflow: hidden; }
+  .h-mail input { border: 0 !important; border-radius: 0 !important; }
+  .h-mail button { border-radius: 0 !important; box-shadow: none !important; }
+  .h-text .h-mail-felder { border-color: rgba(38,41,46,.4) !important; }
+  /* 17 Startseite: GRIT-Plugin größer, Schriftzug kleiner */
+  .held-ohnekopf .h-plug { width: 59.4% !important; }   /* Kim 16:18: 10 % kleiner, KOLORIT bleibt der Star */
+  .held-ohnekopf .h-wm-titel { width: 44% !important; }
+}
+
+/* 22 (Teil) Handy GRIT-Produktseite: Überschrift größer als die Datumszeile */
+@media (max-width: 600px) {
+  .held-grit:not(.held-ohnekopf) .h-gclaim { font-size: 27px !important; }
+  .held-grit:not(.held-ohnekopf) .h-datum { font-size: 16px !important; }
+}
