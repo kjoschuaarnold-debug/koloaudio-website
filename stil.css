@@ -1,169 +1,716 @@
-/* KOLO AUDIO – Vorab-Seite. Farben aus Kims Fotos: warmes Holz, Anthrazit, Gold, sparsam Grün. */
+/* KOLO AUDIO – Arbeitsstand 127. Farben aus Kims Fotos (Holz, Anthrazit) + Plugin-Welt (ACTIVE-Gelb #ffd564). */
 @font-face { font-family: "Michroma"; src: url("schriften/Michroma.woff2") format("woff2"); font-display: swap; }
+@font-face { font-family: "Barlow Semi Condensed"; src: url("schriften/BarlowSemiCondensed-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Barlow"; src: url("schriften/Barlow-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Barlow"; src: url("schriften/Barlow-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Barlow"; src: url("schriften/Barlow-600.woff2") format("woff2"); font-weight: 600; font-display: swap; }   /* 235b, Google Fonts, OFL */
+@font-face { font-family: "IBM Plex Sans"; src: url("schriften/IBMPlexSans-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "IBM Plex Sans"; src: url("schriften/IBMPlexSans-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "IBM Plex Mono"; src: url("schriften/IBMPlexMono-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
 :root {
-  --grund: #141210; --grund-2: #1b1815; --text: #ece6dc; --leise: #a8a094; --gold: #f0b44a; --gold-dunkel: #c98e2c;
-  --linie: rgba(236, 230, 220, .14); --kopf: 56px;
+  --grund: #141210; --grund-2: #1b1815; --text: #ece6dc; --leise: #a8a094; --gelb: #ffd564; --gelb-dunkel: #c9a23e; --rot: #b8282e;
+  --linie: rgba(236, 230, 220, .16); --kopf: 60px; --feld: 48px;
   --titel: "Michroma", "Helvetica Neue", Arial, sans-serif;
   --fliess: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --etikett: "Michroma", "Helvetica Neue", Arial, sans-serif; --etikett-groesse: 11px; --etikett-sperr: .2em; --etikett-gewicht: 400;
+  --technik: var(--fliess);
 }
+/* Schriftvarianten (nur zum Vergleich): A heute, B Barlow, C IBM Plex */
+:root[data-schrift="b"] { --fliess: "Barlow", -apple-system, "Helvetica Neue", Arial, sans-serif; --etikett: "Barlow Semi Condensed", "Barlow", Arial, sans-serif;
+  --etikett-groesse: 13px; --etikett-sperr: .16em; --etikett-gewicht: 500; --technik: var(--etikett); }
+:root[data-schrift="c"] { --fliess: "IBM Plex Sans", -apple-system, "Helvetica Neue", Arial, sans-serif; --etikett: "IBM Plex Mono", Menlo, monospace;
+  --etikett-groesse: 12px; --etikett-sperr: .08em; --etikett-gewicht: 400; --technik: "IBM Plex Mono", Menlo, monospace; }
+
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: var(--kopf); }
+p, h1, h2, h3, li, figcaption { text-wrap: pretty; }
 body { margin: 0; background: var(--grund); color: var(--text); font: 17px/1.6 var(--fliess); -webkit-font-smoothing: antialiased; }
 img { display: block; max-width: 100%; height: auto; }
 a { color: inherit; }
-:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--gelb); outline-offset: 3px; }
 .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.skip { position: absolute; left: -999px; top: 8px; background: var(--gold); color: #000; padding: 8px 12px; z-index: 100; }
+.skip { position: absolute; left: -999px; top: 8px; background: var(--gelb); color: #000; padding: 8px 12px; z-index: 100; }
 .skip:focus { left: 8px; }
+.etikett, .frei, .knopf, .format-liste { font-family: var(--etikett); font-weight: var(--etikett-gewicht); letter-spacing: var(--etikett-sperr); text-transform: uppercase; }
 
-/* Kopfzeile: schmal, leicht abgedunkelt; links nur das KOLO-Zeichen, rechts drei Striche */
+/* Kopfzeile: links das KOLO-AUDIO-Logo (Ring 16 Glieder, graviert), rechts drei Striche */
 .kopf { position: fixed; inset: 0 0 auto 0; height: var(--kopf); display: flex; align-items: center; justify-content: space-between;
-  padding: 0 20px; background: rgba(14, 12, 10, .55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 50; border-bottom: 1px solid rgba(255,255,255,.05); }
-.kopf-zeichen img { width: 34px; height: 34px; }
+  padding: 0 24px; background: rgba(14, 12, 10, .62); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 50; border-bottom: 1px solid rgba(255,255,255,.05); }
+.kopf-logo img { height: 34px; width: auto; }
 .kopf-menu { width: 44px; height: 44px; display: grid; place-content: center; gap: 6px; background: none; border: 0; cursor: pointer; padding: 0; }
 .kopf-menu span { display: block; width: 24px; height: 2px; background: var(--text); border-radius: 1px; transition: transform .25s, opacity .25s; }
 .kopf-menu[aria-expanded="true"] span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
 .kopf-menu[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
 .kopf-menu[aria-expanded="true"] span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
-.menu { position: fixed; inset: var(--kopf) 0 0 0; background: rgba(14, 12, 10, .96); z-index: 49; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 40px; }
+.menu { position: fixed; inset: var(--kopf) 0 0 0; background: rgba(14, 12, 10, .96); z-index: 49; display: flex; justify-content: center; align-items: center; }
 .menu[hidden] { display: none; }
 .menu ul { list-style: none; margin: 0; padding: 0; text-align: center; }
 .menu a { display: block; font: 26px/1 var(--titel); letter-spacing: .12em; padding: 14px 0; text-decoration: none; }
-.menu a:hover { color: var(--gold); }
-.sprache { display: flex; gap: 6px; }
-.sprache button { font: 13px var(--titel); letter-spacing: .1em; color: var(--leise); background: none; border: 1px solid var(--linie); padding: 6px 10px; cursor: pointer; border-radius: 3px; }
-.sprache button[aria-pressed="true"] { color: var(--grund); background: var(--text); border-color: var(--text); }
+.menu a:hover { color: var(--gelb); }
 
-/* gemeinsame Hintergrundbilder */
 section { position: relative; overflow: hidden; }
 .hg { position: absolute; inset: 0; z-index: 0; }
 .hg img { width: 100%; height: 100%; object-fit: cover; }
+.inhalt { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; }
+.mitte { text-align: center; }
 .name { font-family: var(--titel); font-weight: 400; letter-spacing: .14em; margin: 0; line-height: 1.05; }
-
-/* Start: Name + Unterzeile über dem Plugin, Plugin scharf vor unscharfem Holz */
-.start { min-height: 100vh; display: flex; align-items: center; padding: calc(var(--kopf) + 36px) 20px 56px; }
-.start::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 42%, rgba(0,0,0,0) 30%, rgba(0,0,0,.45) 100%), linear-gradient(rgba(0,0,0,.25), rgba(0,0,0,0) 30%, rgba(0,0,0,.35)); z-index: 0; }
-.start-inhalt { position: relative; z-index: 1; width: 100%; max-width: 1150px; margin: 0 auto; text-align: center; }
-.start .name { font-size: clamp(38px, 5.6vw, 76px); text-shadow: 0 2px 24px rgba(0,0,0,.45); }
-.unterzeile { margin: 10px auto 26px; max-width: 760px; font-size: clamp(16px, 1.6vw, 20px); color: #e9e1d3; text-shadow: 0 1px 12px rgba(0,0,0,.6); }
-.plugin-start { display: block; max-width: 940px; margin: 0 auto; }
-.plugin-start img { width: 100%; border-radius: 6px; box-shadow: 0 40px 80px -20px rgba(0,0,0,.85), 0 12px 30px rgba(0,0,0,.55); }
-.kauf { margin-top: 26px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
-.preis { margin: 0; font-size: 16px; color: #f3e7d1; }
-.knoepfe { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
-.knopf { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 0 24px; border-radius: 4px; font: 13px/1 var(--titel);
-  letter-spacing: .12em; text-transform: uppercase; text-decoration: none; cursor: pointer; border: 1px solid transparent; transition: background .2s, color .2s, border-color .2s; }
-.knopf-gold { background: var(--gold); color: #1a1208; }
-.knopf-gold:hover { background: #ffc865; }
-.knopf-leise { background: rgba(0,0,0,.25); color: var(--text); border-color: rgba(236,230,220,.4); }
-.knopf-leise:hover { border-color: var(--gold); color: var(--gold); }
-.code { font-size: 14px; color: var(--leise); }
-.code summary { cursor: pointer; list-style: none; text-decoration: underline; text-underline-offset: 3px; }
-.code summary::-webkit-details-marker { display: none; }
-.code-feld input { margin-top: 10px; width: 180px; text-align: center; text-transform: uppercase; letter-spacing: .12em; }
-.code-hinweis { margin: 6px 0 0; color: var(--gold); }
-input[type="text"], input[type="email"] { font: 16px var(--fliess); color: var(--text); background: rgba(0,0,0,.35); border: 1px solid rgba(236,230,220,.3); border-radius: 4px; padding: 12px 14px; min-height: 46px; }
-input::placeholder { color: #8f887d; }
-
-/* Produktbänder (Vorbild PunchBOX 2) */
-.band { min-height: 78vh; display: flex; flex-direction: column; }
-.band::after { content: ""; position: absolute; inset: 0; background: linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,0) 45%); z-index: 0; pointer-events: none; }
-.band-text { position: relative; z-index: 1; text-align: center; padding: 96px 20px 34px; }
-.name-gross { font-size: clamp(38px, 8vw, 104px); text-shadow: 0 2px 28px rgba(0,0,0,.5); }
-.kategorie { margin: 12px 0 22px; font-size: clamp(16px, 1.7vw, 21px); color: #efe6d6; text-shadow: 0 1px 12px rgba(0,0,0,.6); }
-.anschnitt { position: relative; z-index: 1; margin-top: auto; height: clamp(170px, 30vw, 330px); overflow: hidden; }
-.anschnitt .plugin { display: block; width: max(150%, 1500px); margin-left: calc(50% - max(150%, 1500px) * .382); }
-.anschnitt img { width: 100%; border-radius: 6px 6px 0 0; box-shadow: 0 -10px 60px rgba(0,0,0,.6); }
-
-.mehr { background: var(--grund-2); border-top: 1px solid rgba(240,180,74,.35); }
-.mehr-inhalt { max-width: 820px; margin: 0 auto; padding: 56px 20px 64px; }
-.mehr h3 { font: 22px/1.3 var(--titel); letter-spacing: .08em; margin: 0 0 24px; color: var(--gold); }
-.kette { margin: 0; padding: 0; list-style: none; counter-reset: k; }
-.kette li { counter-increment: k; position: relative; padding: 0 0 18px 44px; }
-.kette li::before { content: counter(k); position: absolute; left: 0; top: 2px; width: 28px; height: 28px; border: 1px solid var(--gold-dunkel); border-radius: 50%;
-  font: 12px/26px var(--titel); text-align: center; color: var(--gold); }
-.kauf-klein { align-items: flex-start; margin-top: 20px; }
-
-.band-grit { min-height: 86vh; justify-content: center; }
-.grit-raster { position: relative; z-index: 1; display: grid; grid-template-columns: auto 1fr; gap: clamp(28px, 6vw, 80px); align-items: center;
-  max-width: 1100px; margin: 0 auto; padding: calc(var(--kopf) + 40px) 20px 70px; }
-.plugin-grit img { width: clamp(240px, 32vw, 420px); border-radius: 6px; box-shadow: 0 36px 70px -18px rgba(0,0,0,.85), 0 10px 26px rgba(0,0,0,.5); }
-.grit-text p { margin: 0 0 10px; max-width: 520px; }
-.grit-text .name { text-align: left; }
-.grit-text .kategorie { margin: 10px 0 18px; }
-.frei { display: inline-block; font: 12px var(--titel); letter-spacing: .2em; color: #102020; background: #7fc8c2; padding: 6px 10px; border-radius: 3px; margin-bottom: 14px !important; }
-.mail { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
-.mail label { flex: 1 1 240px; }
-.mail input { width: 100%; }
+.titel { font: 400 clamp(22px, 2.4vw, 30px)/1.3 var(--titel); letter-spacing: .1em; margin: 0 0 18px; }
 .klein { font-size: 13px; color: var(--leise); }
 
-/* Flächen: Klang, Stimmen, Über, Formate, News */
-.flaeche { padding: 96px 20px; }
-.inhalt { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; }
-.schmal { max-width: 720px; }
-.titel { font: clamp(26px, 3.2vw, 38px)/1.2 var(--titel); letter-spacing: .1em; margin: 0 0 14px; }
-.klein-titel { font-size: 18px; }
-.hinweis { color: var(--leise); margin: 0 0 36px; }
-.flaeche-klang::after, .flaeche-ueber::after, .flaeche-news::after { content: ""; position: absolute; inset: 0; background: rgba(10,9,8,.45); z-index: 0; }
-.flaeche-ruhig { background: var(--grund-2); }
-.spieler-raster { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
-.spieler { background: rgba(16,14,12,.78); border: 1px solid var(--linie); border-radius: 8px; padding: 20px; backdrop-filter: blur(4px); }
-.spieler h3 { margin: 0 0 4px; font: 14px/1.3 var(--titel); letter-spacing: .1em; }
-.spieler .wer { margin: 0 0 16px; font-size: 13px; color: var(--leise); }
-.ab { display: inline-flex; border: 1px solid var(--linie); border-radius: 4px; overflow: hidden; margin-bottom: 16px; }
-.ab button { font: 12px var(--titel); letter-spacing: .1em; padding: 9px 14px; background: none; color: var(--leise); border: 0; cursor: pointer; }
-.ab button[aria-pressed="true"] { background: var(--gold); color: #1a1208; }
-.zeile { display: flex; align-items: center; gap: 14px; }
-.spiel { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--gold-dunkel); background: none; color: var(--gold); cursor: pointer; display: grid; place-items: center; flex: none; }
-.spiel svg { width: 16px; height: 16px; fill: currentColor; }
-.balken { flex: 1; height: 4px; background: rgba(255,255,255,.12); border-radius: 2px; overflow: hidden; }
-.balken i { display: block; height: 100%; width: 0; background: var(--gold); }
-.spieler .bald { margin: 12px 0 0; font-size: 12px; color: var(--leise); }
-.zitate { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 26px; }
-.zitate figure { margin: 0; padding: 28px; border-left: 2px solid var(--gold-dunkel); background: rgba(255,255,255,.02); }
-.zitate blockquote { margin: 0 0 14px; font-size: 19px; line-height: 1.5; }
-.zitate figcaption { font-size: 13px; color: var(--leise); }
-.flaeche-ueber p { font-size: 18px; }
-.unterschrift { color: var(--leise); font-size: 15px !important; margin-top: 24px; }
-.formate { padding: 54px 20px; }
-.format-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px 28px; color: #d8d0c3; }
-.format-liste li::before { content: "·"; color: var(--gold); margin-right: 10px; }
+/* Knöpfe und E-Mail-Feld: gleiche Höhe, Schrift im Verhältnis zum Feld */
+.knopf { display: inline-flex; align-items: center; justify-content: center; height: var(--feld); padding: 0 22px; border-radius: 4px; font-size: var(--etikett-groesse);
+  line-height: 1; text-decoration: none; cursor: pointer; border: 1px solid transparent; white-space: nowrap; transition: background .2s, color .2s, border-color .2s; }
+.knopf-gelb { background: var(--gelb); color: #1a1406; }
+.knopf-gelb:hover { background: #ffe08c; }
+.knopf-leise { background: rgba(10, 9, 8, .55); color: var(--text); border-color: var(--linie); }
+.knopf-leise:hover { border-color: var(--gelb); color: var(--gelb); }
+.mail { display: flex; gap: 10px; margin: 28px 0 0; max-width: 520px; }
+.mail label { flex: 1; min-width: 0; display: block; }
+.mail input { width: 100%; height: var(--feld); margin: 0; padding: 0 16px; border-radius: 4px; border: 1px solid var(--linie); background: rgba(10, 9, 8, .6);
+  color: var(--text); font: 16px var(--fliess); }
+.mail input::placeholder { color: #8f887d; }
 
-/* Fußzeile: schlicht */
-.fuss { background: #0e0d0b; border-top: 1px solid rgba(255,255,255,.06); padding: 40px 20px 46px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+/* Start / KOLO GRIT: Plugin links, Text rechts mit einer gemeinsamen linken Kante */
+.band-grit { padding: calc(var(--kopf) + 64px) 24px 80px; }
+.band-grit::after { content: ""; position: absolute; inset: 0; background: linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,0) 45%); z-index: 0; pointer-events: none; }   /* exakt wie live (.band::after) */
+.grit-raster { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 420px minmax(0, 520px); gap: 72px; align-items: center; justify-content: center; }
+.plugin-grit img { width: 420px; border-radius: 6px; box-shadow: 0 40px 80px -20px rgba(0,0,0,.85), 0 12px 30px rgba(0,0,0,.55); }
+a.plugin { display: block; transition: transform .25s; }
+a.plugin:hover { transform: translateY(-3px); }
+.grit-text > * { margin-left: 0; }
+.frei { display: inline-block; margin: 0 0 20px; padding: 6px 12px 5px; font-size: var(--etikett-groesse); line-height: 1; color: var(--gelb);
+  border: 1px solid var(--gelb); border-radius: 3px; background: rgba(10, 9, 8, .55); box-shadow: 0 0 14px rgba(255, 213, 100, .18); }
+.produkt { margin: 0 0 22px; line-height: 0; }
+.wortmarke { height: clamp(40px, 5.6vw, 76px); width: auto; max-width: 100%; color: var(--text); overflow: visible; filter: drop-shadow(0 2px 10px rgba(0,0,0,.45)); }
+.kategorie { font-size: 20px; line-height: 1.4; margin: 0 0 12px; color: var(--text); }
+.grit-text p:not(.frei):not(.kategorie) { margin: 0 0 8px; color: #ddd5c8; max-width: 480px; }
+
+/* Neues Plugin: Titel, KOLORIT-Bild mit Datum (zwei Varianten), Benachrichtigung */
+.flaeche { padding: 88px 24px; }
+.flaeche-teaser::after { content: ""; position: absolute; inset: 0; background: rgba(10,9,8,.5); z-index: 0; }   /* exakt wie live */
+.teaser .titel { margin-bottom: 28px; }
+.kachel { display: block; max-width: 860px; margin: 0 auto; text-decoration: none; }
+.kolorit-bild { position: relative; margin: 0 auto; max-width: 860px; }
+.kolorit-bild img { width: 100%; border-radius: 6px; box-shadow: 0 40px 80px -24px rgba(0,0,0,.9), 0 10px 26px rgba(0,0,0,.55); }
+/* Datum 15.12.26 – verdeckt nichts vom Plugin: (a1) roter / (a2) gelber Eckbalken außerhalb des Bildes, (b) eigener Streifen unter dem Bild */
+.band-ecke, .datum-streifen { display: none; }
+:root[data-datum="a1"] .band-ecke, :root[data-datum="a2"] .band-ecke { display: block; position: absolute; top: -78px; right: -78px; width: 132px; height: 132px; overflow: hidden; pointer-events: none; }
+.band-ecke span { position: absolute; left: -40px; top: 46px; width: 212px; transform: rotate(45deg); text-align: center; font: 400 15px/1 var(--titel); letter-spacing: .18em;
+  padding: 10px 0 9px; box-shadow: 0 6px 18px rgba(0,0,0,.55); }
+:root[data-datum="a1"] .band-ecke span { background: var(--rot); color: #fff; }
+:root[data-datum="a2"] .band-ecke span { background: var(--gelb); color: #1a1406; }
+:root[data-datum="b"] .datum-streifen { display: block; margin: 0 auto; max-width: 860px; padding: 11px 0 10px; text-align: center; border-radius: 0 0 6px 6px;
+  background: #0f0e0c; border-top: 1px solid rgba(255,255,255,.05); font: 400 13px/1 var(--titel); letter-spacing: .34em; color: #a49c90;
+  text-shadow: 0 -1px 0 rgba(0,0,0,.95), 0 1px 0 rgba(255,255,255,.14); }
+:root[data-datum="b"] .kolorit-bild img { border-radius: 6px 6px 0 0; }
+.teaser .mail { margin: 34px auto 0; max-width: 560px; }
+.hinweis { margin: 22px auto 0; font-size: 13px; color: var(--leise); }
+
+/* Über KOLO AUDIO: knapp */
+.flaeche-ueber { padding: 52px 24px 56px; }
+.flaeche-ueber::after { content: ""; position: absolute; inset: 0; background: rgba(10,9,8,.45); z-index: 0; }   /* exakt wie live */
+.flaeche-ueber .titel { margin-bottom: 12px; }
+.flaeche-ueber p { margin: 0 auto; max-width: 640px; font-size: 18px; }
+.unterschrift { color: var(--leise); font-size: 15px !important; margin-top: 10px !important; }
+
+/* Formate: eine kleine Zeile, nur einmal je Seite */
+.formate { display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; gap: 6px 18px; padding: 22px 24px; background: #100e0c; border-top: 1px solid rgba(255,255,255,.05); }
+.formate .etikett { margin: 0; font-size: var(--etikett-groesse); color: var(--gelb); }
+.format-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 18px; color: #cfc7ba;
+  font-family: var(--technik); font-size: 13px; letter-spacing: .02em; text-transform: none; }
+.format-liste li + li::before { content: "·"; color: var(--gelb-dunkel); margin-right: 18px; }
+
+/* Unterseiten */
+.unterseite .band-grit { padding-top: calc(var(--kopf) + 64px); }
+.kolorit-kopf { padding-top: calc(var(--kopf) + 56px); }
+.kolorit-kopf .name { font-size: clamp(34px, 4.4vw, 58px); margin-bottom: 10px; }
+.kolorit-kopf .kategorie { margin-bottom: 30px; color: #e6dfd3; }
+.unterzeile { margin: 28px auto 0; max-width: 680px; font-size: 18px; color: #e9e1d3; }
+.kauf { margin-top: 24px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.preis { margin: 0; font-size: 15px; color: #f3e7d1; }
+.knoepfe { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.flaeche-ruhig { background: var(--grund-2); }
+.wie .inhalt { max-width: 760px; }
+.zwischen { font-size: 20px; margin: 0 0 18px; color: var(--text); }
+.kette { margin: 0; padding: 0 0 0 1.4em; color: #ddd5c8; }
+.kette li { margin: 0 0 12px; padding-left: 6px; }
+.kette li::marker { color: var(--gelb); font-family: var(--titel); font-size: 13px; }
+
+/* Fußzeile: jede Angabe nur einmal */
+.fuss { background: #0c0b09; padding: 26px 24px 30px; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
 .fuss-links { display: flex; gap: 8px 22px; flex-wrap: wrap; justify-content: center; font-size: 14px; }
 .fuss-links a { text-decoration: none; color: #cfc7ba; }
-.fuss-links a:hover { color: var(--gold); }
+.fuss-links a:hover { color: var(--gelb); }
 .fuss .klein { margin: 0; }
 
-.toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: #2a241c; color: var(--text); border: 1px solid var(--gold-dunkel);
+.toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: #2a241c; color: var(--text); border: 1px solid var(--gelb-dunkel);
   padding: 12px 18px; border-radius: 6px; font-size: 14px; z-index: 60; max-width: calc(100vw - 32px); }
 
-/* Unterseiten (Rechtliches) */
+/* Rechtliches */
 .seite { max-width: 760px; margin: 0 auto; padding: calc(var(--kopf) + 50px) 20px 80px; }
 .seite h1 { font: 28px/1.3 var(--titel); letter-spacing: .1em; }
+.seite h2 { font: 15px/1.4 var(--titel); letter-spacing: .08em; margin: 30px 0 6px; color: var(--gelb); }
 
-@media (max-width: 800px) {
-  .start { min-height: auto; padding-top: calc(var(--kopf) + 44px); }
-  .band { min-height: auto; }
-  .anschnitt { height: 240px; }
-  .anschnitt .plugin { width: 230%; margin-left: calc(50% - 230% * .382); }
-  .band-text { padding-top: 72px; }
-  .grit-raster { grid-template-columns: 1fr; justify-items: center; text-align: center; }
-  .grit-text .name { text-align: center; }
-  .grit-text p { margin-left: auto; margin-right: auto; }
-  .mail { justify-content: center; }
-  .flaeche { padding: 72px 20px; }
-  .kauf-klein { align-items: center; }
+@media (max-width: 900px) {
+  .grit-raster { grid-template-columns: minmax(0, 420px); gap: 40px; }
+  .plugin-grit img { width: 100%; max-width: 360px; margin: 0 auto; }
+  .band-grit { padding: calc(var(--kopf) + 36px) 20px 56px; }
+  .wortmarke { height: 34px; }
+  .flaeche { padding: 64px 20px; }
+  .mail { flex-direction: column; }
+  .mail .knopf { width: 100%; }
+  .kachel { padding: 44px 30px 0 0; }   /* Platz für den Eckbalken neben dem Bild */
+  :root[data-datum="a1"] .band-ecke, :root[data-datum="a2"] .band-ecke { top: -60px; right: -60px; width: 100px; height: 100px; }
+  .band-ecke span { left: -36px; top: 34px; width: 172px; font-size: 11px; padding: 7px 0 6px; }
+  .kopf { padding: 0 16px; }
+  .kopf-logo img { height: 30px; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
 
-/* Vorab: Start = KOLO GRIT, Teaser für das nächste Plugin */
-.start-grit { min-height: 100vh; }
-.teaser { text-align: center; }
-.teaser .datum { font: 14px var(--titel); letter-spacing: .24em; color: var(--gold); margin: 0 0 14px; }
-.teaser p { max-width: 620px; margin-left: auto; margin-right: auto; }
-.teaser .mail { justify-content: center; max-width: 560px; margin-left: auto; margin-right: auto; }
-.flaeche-teaser::after { content: ""; position: absolute; inset: 0; background: rgba(10,9,8,.5); z-index: 0; }
+/* 127 N1: About mit Foto – Text links, Foto rechts, kompakt */
+.ueber-raster { display: flex; align-items: center; justify-content: center; gap: 44px; max-width: 860px; }
+.ueber-text { flex: 0 1 560px; text-align: left; }
+.ueber-text p { margin: 0; max-width: none; }
+.ueber-foto img { width: 180px; height: 180px; border-radius: 6px; object-fit: cover; box-shadow: 0 18px 40px -12px rgba(0,0,0,.8); }
+.fuss-logo { height: 26px; width: auto; opacity: .9; margin-bottom: 4px; }
+@media (max-width: 900px) {
+  .ueber-raster { flex-direction: column-reverse; gap: 22px; }
+  .ueber-text { text-align: center; flex: none; }
+  .ueber-foto img { width: 140px; height: 140px; }
+}
 
-.seite h2 { font: 15px/1.4 var(--titel); letter-spacing: .08em; margin: 30px 0 6px; color: var(--gold); }
+/* ================= 228 (Tafeln Startseite + Produktseite) ================= */
+/* Gelber BUY-Knopf: Farbe an einer Stelle (Kim stellt sie im Pult ein) */
+:root { --knopf-kauf: #ffd564; }
+.knopf-gelb { background: var(--knopf-kauf); }
+.knopf-gelb:hover { background: var(--knopf-kauf); filter: brightness(1.08); }
+.knopf.gesperrt, .knopf:disabled { opacity: .38; cursor: not-allowed; filter: grayscale(1); }
+.knopf.gesperrt:hover { filter: grayscale(1); }
+
+/* Hintergründe: vorerst neutrale dunkle Platzhalter (Kim stellt sie im Pult ein) */
+.hg-platz { background: #18181a; }
+.hg-platz-1 { background: radial-gradient(120% 80% at 50% 20%, #2a2a2d 0%, #18181a 60%, #121213 100%); }
+.hg-platz-2 { background: radial-gradient(110% 90% at 30% 40%, #26272a 0%, #161618 65%, #111112 100%); }
+.hg-platz-3 { background: radial-gradient(110% 90% at 70% 40%, #242527 0%, #151516 65%, #101011 100%); }
+.flaeche-teaser::after, .flaeche-ueber::after, .band-grit::after { display: none; }
+
+/* Wortmarke: KOLORIT (Vektor wie im Plugin) bzw. „Grit“-Schriftzug aus dem Plugin – einfarbig oder farbig */
+.wm { margin: 0 auto; line-height: 0; }
+.wm img { height: auto; margin: 0 auto; filter: drop-shadow(0 2px 10px rgba(0,0,0,.45)); }
+.wm-kolorit img { width: clamp(220px, 30vw, 380px); }
+.wm-grit img { width: clamp(150px, 18vw, 230px); }
+.wm .wm-farbig { display: none; }
+:root[data-wortmarke="farbig"] .wm .wm-farbig { display: block; }
+:root[data-wortmarke="farbig"] .wm .wm-einfarbig { display: none; }
+.wm-klein.wm-kolorit img { width: clamp(180px, 22vw, 280px); }
+.wm-klein.wm-grit img { width: clamp(120px, 14vw, 180px); }
+.leitsatz { margin: 0 0 30px; color: var(--leise); font-size: 16px; }
+.klein-satz { font-size: 15px; }
+
+/* Plugin-Bild: weicher, natürlicher Schatten (kein Kasten), Banderole über der rechten oberen Ecke */
+.plugin-link { display: block; text-decoration: none; transition: transform .25s; }
+.plugin-link:hover { transform: translateY(-3px); }
+.plugin-bild { position: relative; margin: 0 auto; }
+.plugin-kolorit { max-width: 900px; }
+.plugin-bild img { width: 100%; border-radius: 6px; box-shadow: none; filter: drop-shadow(0 30px 40px rgba(0,0,0,.55)) drop-shadow(0 8px 14px rgba(0,0,0,.35)); }
+.plugin-grit { width: 420px; max-width: 100%; }
+.plugin-bild .banderole { display: block; position: absolute; top: -68px; right: -68px; width: 150px; height: 150px; overflow: hidden; pointer-events: none; z-index: 2; }   /* 228: Band kreuzt die Ecke (deckt Ecke + Schraube, nicht die AG-Anzeige), Rest außerhalb */
+.plugin-bild .banderole span { position: absolute; left: 50%; top: 50%; width: 220px; transform: translate(-50%, -50%) rotate(45deg); text-align: center; font: 400 13px/1 var(--titel);
+  letter-spacing: .18em; padding: 8px 0 7px; background: var(--rot); color: #fff; box-shadow: 0 6px 16px rgba(0,0,0,.5); }
+
+/* Startseite 1: KOLORIT oben */
+.start-kolorit { padding-top: calc(var(--kopf) + 56px); }
+.start-kolorit .kategorie { margin: 14px 0 6px; }
+.preiszeile { margin: 34px 0 18px; font-size: 16px; color: #f3e7d1; }
+.start-kolorit .mail { margin: 26px auto 0; max-width: 560px; }
+
+/* Startseite 2: Freebies (KOLO GRIT) */
+.band-grit { padding-top: 64px; }
+.start .band-grit { padding-top: 64px; }
+.freebies { grid-column: 1 / -1; justify-self: center; margin: 0 0 6px; font-size: var(--etikett-groesse); color: var(--gelb); }
+.frei-datum { margin: 14px 0 0 !important; color: #f3e7d1 !important; font-size: 15px; }
+.mehr { margin: 18px 0 0 !important; }
+.mehr a { color: var(--gelb); text-decoration: none; border-bottom: 1px solid rgba(255,213,100,.4); }
+.mehr a:hover { border-color: var(--gelb); }
+
+/* Produktseiten */
+.produkt-kopf { padding-top: calc(var(--kopf) + 48px); padding-bottom: 56px; }
+.produkt-kopf .kategorie { margin: 14px 0 6px; }
+.kaufbalken { background: #0f0f10; border-top: 1px solid rgba(255,255,255,.06); border-bottom: 1px solid rgba(255,255,255,.06); }
+.kaufbalken-innen { max-width: 1080px; margin: 0 auto; padding: 22px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 28px; }
+.preis-block { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 16px; }
+.preis-gross { font: 400 34px/1 var(--titel); letter-spacing: .04em; color: var(--text); }
+.preis-alt { font: 400 20px/1 var(--titel); color: var(--leise); }
+.preis-text { font-size: 15px; color: #e6dfd3; }
+.waehrung { font-family: var(--fliess); }
+.kauf-knoepfe { display: flex; gap: 12px; flex-wrap: wrap; }
+.kauf-knoepfe .mail { margin: 0; min-width: min(460px, 100%); }
+.ab-datum { flex-basis: 100%; margin: 0; text-align: right; font-size: 13px; color: var(--leise); }
+.ab-datum[hidden] { display: none; }
+.kurz { padding: 48px 24px; }
+.kurz .unterzeile { margin: 0 auto; }
+.kurz .unterzeile + .unterzeile { margin-top: 10px; }
+.module .inhalt { max-width: 980px; }
+.modul { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 40px; align-items: center; margin: 0 0 48px; }
+.modul img { height: auto; max-width: 100%; justify-self: center; border-radius: 4px; box-shadow: 0 18px 40px -16px rgba(0,0,0,.8); }
+.modul-rechts img { order: 2; }
+.modul h3 { margin: 0 0 10px; font-size: var(--etikett-groesse); color: var(--gelb); }
+.modul p { margin: 0; color: #ddd5c8; max-width: 440px; }
+.klaenge .inhalt { max-width: 760px; }
+.flaeche-ruhig.hg-platz { background: #161618; }   /* 228: neutrale Platzhalter statt Braunton */
+.klaenge .hinweis { margin: -6px 0 18px; }
+.spieler { display: grid; grid-template-columns: 90px 1fr; align-items: center; gap: 16px; padding: 12px 0; border-top: 1px solid var(--linie); }
+.spieler-name { font-family: var(--etikett); font-size: var(--etikett-groesse); letter-spacing: var(--etikett-sperr); text-transform: uppercase; color: var(--text); }
+.spieler-knoepfe { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.spieler-knoepfe .knopf[aria-pressed="true"] { border-color: var(--gelb); color: var(--gelb); }
+.presets .zwischen { margin-bottom: 8px; }
+.preset-namen { margin: 0 0 26px; color: var(--leise); }
+
+/* Handbuch-Seiten */
+.handbuch { padding-top: calc(var(--kopf) + 48px); }
+.handbuch .kategorie { margin: 12px 0 26px; }
+.handbuch-plugin { width: auto; max-width: min(520px, 90%); max-height: 300px; margin: 0 auto 36px; filter: drop-shadow(0 20px 30px rgba(0,0,0,.55)); }
+.handbuch-knoepfe { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; max-width: 920px; margin: 0 auto; }
+.knopf-gross { height: 64px; font-size: 13px; gap: 10px; }
+.knopf-gross .pdf { opacity: .6; font-size: 10px; }
+
+/* Creators (versteckt) */
+.creators { padding-top: calc(var(--kopf) + 56px); }
+.dl-block { margin: 30px auto 0; }
+.dl-block .etikett { font-size: var(--etikett-groesse); color: var(--gelb); margin: 0 0 12px; }
+.dl-block .knoepfe { justify-content: center; }
+
+/* Fuß in 4 Spalten */
+.fuss-spalten { display: grid; grid-template-columns: repeat(4, minmax(0, 170px)); gap: 24px 40px; justify-content: center; text-align: left; margin: 8px 0 14px; }
+.fuss-spalten nav { display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+.fuss-spalten .etikett { margin: 0 0 4px; font-size: 10px; color: var(--gelb); }
+.fuss-spalten a { color: #cfc7ba; text-decoration: none; }
+.fuss-spalten a:hover { color: var(--gelb); }
+.platzhalter-text { color: #d07a5a !important; }
+
+@media (max-width: 900px) {
+  .start-kolorit, .produkt-kopf, .handbuch, .creators { padding-top: calc(var(--kopf) + 32px); }
+  .plugin-bild .banderole { top: -51px; right: -51px; width: 100px; height: 100px; }
+  .plugin-bild .banderole span { width: 150px; font-size: 9px; padding: 5px 0 5px; }
+  .kaufbalken-innen { flex-direction: column; align-items: stretch; text-align: center; }
+  .preis-block { justify-content: center; }
+  .kauf-knoepfe { justify-content: center; }
+  .kauf-knoepfe .knopf { flex: 1; }
+  .ab-datum { text-align: center; }
+  .modul, .modul-rechts { grid-template-columns: 1fr; gap: 16px; }
+  .modul-rechts img { order: 0; }
+  .spieler { grid-template-columns: 1fr; gap: 8px; }
+  .fuss-spalten { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 28px; }
+  .freebies { margin-bottom: 0; }
+}
+
+/* 228b: GRIT-Wortmarke im Freebies-Bereich (linksbündig wie der Text) */
+.grit-text .wm-links { margin: 0 0 18px; }
+.grit-text .wm-links img { margin: 0; width: clamp(150px, 16vw, 220px); }
+@media (max-width: 900px) { .grit-text .wm-links img { width: 160px; } }
+
+/* ===================================================================== 235: nach Kims Pult (referenz/235, pult_stand_235.html) ===== */
+
+/* 1 + 8 Kopfzeile: halbdurchsichtig, 60 px, fest oben (235c), rechts EN / DE, Konto, Menü */
+.kopf { position: fixed; background: rgba(20,17,14,.34); backdrop-filter: blur(14px) saturate(1.1); -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  border-bottom: 1px solid rgba(255,255,255,.08); padding: 0 24px; }
+.kopf-logo img { height: 34px; width: auto; }
+.kopf-rechts { display: flex; align-items: center; gap: 22px; }
+.kopf-sprache { font: 500 13px Barlow, sans-serif; letter-spacing: .08em; color: rgba(236,230,220,.6); display: flex; gap: 6px; }
+.kopf-sprache b { color: #ece6dc; font-weight: 600; }
+.kopf-konto { display: block; width: 24px; height: 24px; }
+.kopf-konto svg { display: block; width: 24px; height: 24px; }
+.kopf-rechts .kopf-menu { margin: 0 -10px; }
+.kopf-menu span { background: #ece6dc; }
+@media (max-width: 900px) { .kopf { padding: 0 16px; } .kopf-logo img { height: 30px; } .kopf-rechts { gap: 18px; } }
+
+/* 2, 3, 5 Startbereiche (Held): Hintergrund nach Pult, Inhalt maßstäblich in einer Bühne der Breite W.
+   W = min(Fensterbreite, (Fensterhöhe − Kopf) / a): so steht alles im ersten Bildschirm. a = Höhe/Breite des Inhalts (gemessen). */
+.held { position: relative; overflow: hidden; isolation: isolate; line-height: 1.5; color: #f4eee4; }
+.held-foto { position: absolute; inset: -6%; background-repeat: no-repeat; background-position: 50% 50%; z-index: -2; }
+.held-toen { position: absolute; inset: 0; mix-blend-mode: color; pointer-events: none; z-index: -1; }
+.held-kolorit .held-foto { background-image: url(bilder/bg_8033.jpg); background-size: cover; filter: blur(3px) brightness(.95) saturate(.25) hue-rotate(78deg); }
+.held-kolorit .held-toen { background: #c8892f; opacity: .40; }
+.held-grit .held-foto { background-image: url(bilder/bg_7942.jpg); background-size: 130% auto; filter: brightness(1.18) saturate(.30); }
+.held-grit .held-toen { background: #8a6a4a; opacity: .14; }
+.held-rahmen { container-type: inline-size; width: min(100%, calc((100svh - var(--kopf)) / var(--a, .74))); margin: 0 auto; }
+.held-start-k { --a: .7397; } .held-produkt-k { --a: .7789; } .held-grit { --a: .4656; }
+.held-in { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.034cqw; padding: calc(var(--kopf) + 3.5%) 3% 4%; text-align: center; }
+.held-ohnekopf .held-in { padding-top: 3.5%; }
+.held p, .held h1, .held h2 { margin: 0; }
+.h-wm { width: 46%; height: auto; transform: translateX(.84%); margin: -.53% 0; }
+.h-unter { font: 400 max(9px, 1.0635cqw) Michroma, sans-serif; letter-spacing: .22em; text-transform: uppercase; margin-top: -.4% !important; color: #f4eee4; text-shadow: 0 1px 3px rgba(0,0,0,.6); }
+.h-plug-link { display: contents; }
+.h-plug { width: 82%; height: auto; filter: drop-shadow(0 18px 30px rgba(0,0,0,.55)) drop-shadow(0 4px 8px rgba(0,0,0,.4)); }
+.h-kauf { margin-top: 1% !important; display: inline-block; font: 400 max(11px, 1.034cqw) Michroma, sans-serif; letter-spacing: .1em; padding: .8em 1.6em; border-radius: 3px; color: #1a1a1a;
+  background: #ecd8a0; text-decoration: none; cursor: pointer; box-shadow: 0 6px 16px rgba(0,0,0,.38), 0 1px 3px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.45); }
+.h-kauf2 { font: 400 max(11px, 1.034cqw) Michroma, sans-serif; letter-spacing: .1em; color: #f4eee4; padding: .8em 1.4em; border: 1px solid rgba(244,238,228,.6); border-radius: 3px;
+  text-shadow: 0 1px 3px rgba(0,0,0,.5); background: rgba(22,18,14,.42); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); text-decoration: none; cursor: pointer; }
+.h-formate { margin-top: -.2954cqw !important; font: 400 max(9px, .7976cqw) Michroma, sans-serif; letter-spacing: .12em; color: #f4eee4; text-shadow: 0 1px 3px rgba(0,0,0,.55); opacity: .92; }
+.h-claim { font: 400 max(22px, 3.5096cqw)/1.15 Michroma, sans-serif; letter-spacing: .07em; color: #f7f2e8; -webkit-text-stroke: .045em #f7f2e8;
+  text-shadow: 0 2px 10px rgba(0,0,0,.45); margin: 4.6% 0 calc(.55em + 4.6%) !important; text-align: center; text-wrap: balance; }
+.h-kaufzeile { display: grid; grid-template-columns: 1fr 1fr; gap: 1.034cqw; align-items: stretch; margin-top: 1.6% !important; }
+.h-kaufzeile .h-kauf, .h-kaufzeile .h-kauf2 { margin: 0 !important; font-size: max(11px, 1.034cqw); padding: .8em 1.6em; display: flex; align-items: center; justify-content: center; }
+.h-preis { font: 600 max(14px, 1.3294cqw) Barlow, sans-serif; letter-spacing: .02em; color: #f4eee4; text-shadow: 0 1px 3px rgba(0,0,0,.55); margin-top: .1477cqw !important; }
+.h-preis + .h-formate { margin-top: 1.4% !important; }
+.h-eur { margin-left: .35em; font-family: Barlow, sans-serif; font-weight: 600; font-size: 1.15em; letter-spacing: 0; line-height: 0; }
+/* KOLO GRIT: Plugin links, Text rechts */
+.held-grit .held-in { flex-direction: row; gap: 4%; }
+.held-grit .h-plug { width: 27.9%; }
+.h-text { display: flex; flex-direction: column; gap: .886cqw; align-items: center; text-align: center; width: 34%; margin-right: -5.47%; }
+.h-wmask { width: 100%; transform: translateX(.84%); aspect-ratio: 1.6227; background: #2a2724;
+  -webkit-mask: url(bilder/wortmarke_grit_maske.svg) center / contain no-repeat; mask: url(bilder/wortmarke_grit_maske.svg) center / contain no-repeat; }
+.h-text .h-unter { font: 500 max(13px, 1.3294cqw) Barlow, sans-serif; letter-spacing: normal; text-transform: none; margin-top: 0 !important; color: #2a2724; text-shadow: none; }
+.h-unter2 { font: 400 max(11px, 1.0103cqw) Barlow, sans-serif; opacity: .8; margin-top: -.4431cqw !important; color: #2a2724; }
+@media (max-width: 600px) {
+  .held-grit .held-in { flex-direction: column; gap: 22px; padding-bottom: 36px; }
+  .held-grit .h-plug { width: 50%; }
+  .h-text { width: 86%; margin-right: 0; gap: 10px; }
+  .held-grit .held-in { padding-top: 28px; }
+  .held-grit:not(.held-ohnekopf) .held-in { padding-top: calc(var(--kopf) + 24px); }
+  .h-text .h-wmask-titel { width: 62% !important; margin-bottom: 6px !important; }
+  .h-unter2 { margin-top: -6px !important; }
+  .h-wm { width: 62%; }
+  .held-kolorit .h-plug { width: 94%; }
+  .held-kolorit .held-in { gap: 12px; padding-bottom: 32px; }
+}
+@media (max-width: 480px) { .h-kaufzeile { grid-template-columns: 1fr; } }
+
+/* 7 Hinweis vor dem Launch („Available December 15“) */
+.bald { position: fixed; inset: 0; z-index: 80; display: flex; align-items: center; justify-content: center; background: rgba(14,12,10,.45); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+.bald[hidden] { display: none; }
+.baldk { max-width: min(480px, 86%); text-align: center; background: rgba(24,20,16,.92); border: 1px solid rgba(236,216,160,.35); border-radius: 6px; padding: 36px 40px 30px; color: #f4eee4; box-shadow: 0 24px 60px rgba(0,0,0,.5); }
+.baldk h2 { font: 400 clamp(16px, 1.8vw, 24px)/1.3 Michroma, sans-serif; letter-spacing: .06em; margin: 0 0 14px; color: #ecd8a0; }
+.baldk p { font: 400 16px/1.6 Barlow, sans-serif; margin: 0 0 24px; text-wrap: balance; }
+.baldk button { font: 400 12px Michroma, sans-serif; letter-spacing: .12em; text-transform: uppercase; background: #ecd8a0; color: #1a1a1a; border: 0; border-radius: 3px; padding: .9em 2em; cursor: pointer; }
+
+/* 4 + 5 Produktseiten-Text (wörtlich aus dem Pult, Grund „Stoff“, Schrift Barlow) */
+.ptext{--pf:Barlow;margin-top:0;padding:clamp(40px,6vw,88px) clamp(20px,5vw,72px);background:#171411;color:#e9e2d6}
+.ptext *{box-sizing:border-box;min-width:0}
+.ptext p{font:400 17px/1.65 var(--pf),sans-serif;margin:0;max-width:62ch;opacity:.92}
+.ptext h2{font:400 clamp(20px,2.2vw,28px)/1.25 Michroma,sans-serif;letter-spacing:.06em;margin:0 0 18px;color:inherit}
+.ptext h3{font:400 13px/1 Michroma,sans-serif;letter-spacing:.2em;text-transform:uppercase;margin:0 0 12px;display:flex;align-items:center;gap:9px}
+.ptext .pi{max-width:760px;margin:0 auto 64px;text-align:center}.ptext .pi p{margin:0 auto;text-wrap:balance}
+.ptext .lead{font-size:19px}
+.ptext .pgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px 72px;max-width:1040px;margin:0 auto}
+.ptext .psys{max-width:1040px;margin:72px auto 0;padding-top:28px;border-top:1px solid rgba(233,226,214,.18)}
+.ptext .psys2{display:grid;grid-template-columns:1fr 1fr;gap:24px 72px;margin-bottom:16px}
+.ptext .psys p{font-size:15px}.ptext .pklein{font-size:14px;opacity:.7}
+@media(max-width:700px){.ptext .pgrid,.ptext .psys2{grid-template-columns:1fr}}
+.ptext h3{text-transform:none;letter-spacing:.04em;font-size:17px;margin:18px 0 8px;display:block}
+.ptext .pherz img,.ptext .ptrio img,.ptext .pduo img{width:100%;display:block;border-radius:6px;box-shadow:0 14px 30px -12px rgba(20,14,8,.55)}
+.ptext .ptrio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px;max-width:860px;margin:0 auto 56px;align-items:start}
+.ptext .ptrio img{height:380px;width:auto;max-width:100%;margin:0 auto}.ptext .ptrio>div{text-align:center}.ptext .ptrio p{text-wrap:pretty}
+.ptext .pduo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px;max-width:860px;margin:0 auto 56px;align-items:start}.ptext .pduo>div{display:grid;grid-template-rows:190px auto auto}.ptext .pduo img{align-self:end;width:auto;max-width:100%;max-height:190px}
+.ptext .ptrio p,.ptext .pduo p{font-size:16px}
+.ptext .pliste{max-width:860px;margin:0 auto;padding:0}
+.ptext .pliste>div{display:grid;grid-template-columns:150px minmax(0,1fr);gap:32px;padding:14px 0}
+.ptext .pliste dt{font:400 15px/1.6 Michroma,sans-serif;letter-spacing:.04em;padding-top:2px}
+.ptext .pliste dd{margin:0;font:400 16px/1.6 var(--pf),sans-serif}
+.ptext .psys h3{font-size:15px}.ptext .psys{max-width:860px;margin-top:56px}.ptext .pi{margin-bottom:52px}
+@media(max-width:760px){.ptext .ptrio,.ptext .pduo,.ptext .pliste>div{grid-template-columns:1fr}}
+.ptext{position:relative;isolation:isolate;overflow:hidden}
+.ptext.stoff{color:#2b241c;background:#cdb894}
+.ptext.stoff::before{content:"";position:absolute;inset:-60px;z-index:-1;background:url(bilder/bg_8033.jpg) center/cover;filter:blur(1.5px) saturate(.45) sepia(.2) brightness(1.12)}
+.ptext.stoff::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(236,226,206,.78),rgba(236,226,206,.62))}
+.ptext.stoff p{opacity:1}
+.ptext.stoff .psys{border-top-color:rgba(43,36,28,.25)}
+.ptext .pi{margin-bottom:64px}
+.ptext .ptrio>div,.ptext .pduo>div{text-align:left}
+.ptext .ptrio h3,.ptext .pduo h3{text-align:left}
+.ptext .pseite{display:grid;grid-template-columns:205px 220px 205px;grid-template-areas:"h h h" "l i r" "c c c";justify-content:center;align-items:center;gap:28px 48px;margin:0 auto 80px}
+.ptext .pseite.breit{grid-template-columns:235px 300px 235px}
+.ptext .pseite h2{grid-area:h;text-align:center;font-size:clamp(24px,2.6vw,34px);letter-spacing:.08em;margin:0}
+.ptext .pseite img{grid-area:i;width:100%;display:block;border-radius:6px;box-shadow:0 14px 30px -12px rgba(20,14,8,.55)}
+.ptext .pseite .pl{grid-area:l}.ptext .pseite .pr{grid-area:r}
+.ptext .pseite .pl,.ptext .pseite .pr{text-align:left;font-size:20px;line-height:1.7;text-wrap:pretty}
+.ptext .pseite .pcap{grid-area:c;text-align:center;font-size:15px;opacity:.8;max-width:30em;margin:0 auto;text-wrap:balance}
+@media(max-width:860px){.ptext .pseite,.ptext .pseite.breit{grid-template-columns:minmax(0,31em);grid-template-areas:"h" "i" "l" "r" "c"}.ptext .pseite img{max-width:240px;margin:0 auto}}
+.ptext .pseite.ohneh{grid-template-areas:"l i r" "c c c"}
+.ptext .pseite .pl{justify-self:end}.ptext .pseite .pr{justify-self:start}
+.ptext .ptrio img{margin-bottom:22px}
+@media(max-width:860px){.ptext .pseite.ohneh{grid-template-areas:"i" "l" "r" "c"}.ptext .pseite .pl,.ptext .pseite .pr{justify-self:stretch}}
+
+/* 11 Seite nicht gefunden */
+.held-404 .held-in { min-height: 100svh; gap: 22px; }
+.h-404-titel { font: 400 clamp(26px, 4cqw, 52px)/1.15 Michroma, sans-serif; letter-spacing: .07em; color: #f7f2e8; text-shadow: 0 2px 10px rgba(0,0,0,.45); }
+.h-404-text { font: 500 clamp(16px, 1.5cqw, 20px) Barlow, sans-serif; color: #f4eee4; text-shadow: 0 1px 3px rgba(0,0,0,.55); }
+
+/* ===================================================================== 235b: Korrekturen nach Pult 235b (referenz/235b, pult_stand_235b.html) ===== */
+/* Umrechnung Pult -> Bühne: Pult-Wert in vw bei 1440 px Fenster = Bühne 1354 px -> cqw = vw × 1,0635 */
+/* 9 vor / ab Launch: <html class="ab"> ab 15.12.2026 00:00 deutscher Zeit (Kopf-Skript) */
+html.ab .nur-vor, html:not(.ab) .nur-ab { display: none !important; }
+html:not(.ab) .held-produkt-k { --a: .8282; }
+html.ab .held-produkt-k { --a: .7969; }
+/* 2 Plugin-Ecken */
+.h-plug { border-radius: clamp(5px, .7976cqw, 11px); }
+/* 6, 9, 10, 11 E-Mail-Feld */
+.h-mail { width: min(41.36cqw, 62%); margin-top: .2954cqw !important; }
+.h-mail-felder { display: flex; gap: .7386cqw; }
+.h-mail input, .h-mail button { box-sizing: border-box; align-self: stretch; margin: 0; }
+.h-mail input { flex: 1; min-width: 0; font: 400 max(11px, 1.0635cqw) Barlow, sans-serif; padding: .75em 1em; border-radius: 3px; border: 1px solid rgba(244,238,228,.5);
+  background: rgba(18,15,12,.45); color: #f4eee4; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); height: auto; }
+.h-mail input::placeholder { color: rgba(244,238,228,.6); }
+.h-mail button { flex: 0 0 auto; font: 400 max(9px, .8508cqw) Michroma, sans-serif; letter-spacing: .1em; padding: .8em 1.3em; border-radius: 3px; border: 1px solid rgba(244,238,228,.5);
+  background: rgba(22,18,14,.42); color: #f4eee4; white-space: nowrap; cursor: pointer; height: auto; text-transform: none; }
+.h-hinweis { font: 500 max(11px, 1.0103cqw) Barlow, sans-serif; color: #f4eee4; margin-top: -.4431cqw !important; text-shadow: 0 1px 4px rgba(0,0,0,.7), 0 0 10px rgba(0,0,0,.35); }
+.h-hinweis a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+/* 13 Datumszeile */
+.h-datum { font: 400 max(13px, 1.5421cqw)/1.2 Michroma, sans-serif; letter-spacing: .04em; color: #f7f2e8; -webkit-text-stroke: .025em currentColor; text-shadow: 0 2px 8px rgba(0,0,0,.45); margin-top: .6% !important; }
+.h-preis-vor { margin-top: -.4431cqw !important; }
+.h-formate.nach-preis { margin-top: 1.4% !important; }
+/* 17, 18 Formate- und Hinweiszeilen */
+.h-formate { font-size: max(10px, 1.0103cqw) !important; letter-spacing: .08em !important; -webkit-text-stroke: .02em currentColor; opacity: 1 !important; }
+.h-hinweis, .h-formate { text-wrap: balance; max-width: 44em; text-align: center; margin-left: auto !important; margin-right: auto !important; }
+/* 4, 20 GRIT-Hintergrund + Licht von rechts */
+.held-grit .held-foto { background-image: url(bilder/bg_7942.jpg); background-size: 130% auto; filter: brightness(1.19) saturate(.08); }
+.held-grit .held-toen { background: #5f6b78; opacity: .16; }
+.held-grit .held-foto::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(214,218,223,0) 38%, rgba(214,218,223,.42) 62%, rgba(214,218,223,.5) 80%, rgba(214,218,223,.38) 100%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 50%, rgba(0,0,0,.45) 100%); mask-image: linear-gradient(180deg, #000 0%, #000 50%, rgba(0,0,0,.45) 100%); }
+/* 3, 5 GRIT-Freebies: Schriftzug, Schrift #26292e */
+.h-text { color: #26292e; }
+.h-wmg { display: block; width: 100%; height: auto; max-width: none; }
+.h-text .h-unter { font: 400 max(12px, 1.4357cqw)/1.35 Michroma, sans-serif; letter-spacing: .03em; -webkit-text-stroke: .025em currentColor; text-wrap: balance; max-width: 24em; color: #26292e;
+  text-shadow: 0 .5px 0 rgba(255,255,255,.22); text-transform: none; }
+.h-text .h-unter2 { font: 500 max(11px, 1.1167cqw)/1.4 Barlow, sans-serif; opacity: .85; margin-top: -.2954cqw !important; color: #26292e; text-shadow: 0 .5px 0 rgba(255,255,255,.22); }
+/* 7 GRIT-Knöpfe Silber */
+.h-kauf.h-silber { background: linear-gradient(180deg, #f4f6f8 0%, #dfe3e7 48%, #c6cbd1 100%); color: #1d1f24; border: 1px solid rgba(255,255,255,.6);
+  box-shadow: 0 6px 16px rgba(0,0,0,.32), 0 1px 3px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(0,0,0,.12); }
+/* 7, 16 GRIT-Produktseite oben */
+.h-gclaim { font: 400 max(20px, 3.1906cqw)/1.15 Michroma, sans-serif; letter-spacing: .07em; color: #26292e; -webkit-text-stroke: .03em #26292e; text-wrap: balance; margin: 0 0 .3em !important;
+  text-align: center; text-shadow: 0 .5px 0 rgba(255,255,255,.22); }
+.h-gclaim + .h-unter2 { font-size: max(13px, 1.3826cqw) !important; opacity: 1 !important; }
+.h-text .h-datum { color: #26292e; text-shadow: 0 .5px 0 rgba(255,255,255,.22); }
+.h-text .h-mail { width: 100%; max-width: 33.97cqw; }
+.h-text .h-mail input { background: rgba(255,255,255,.55); border-color: rgba(38,41,46,.35); color: #1d1f24; }
+.h-text .h-mail input::placeholder { color: rgba(29,31,36,.55); }
+.h-text .h-mail button { background: linear-gradient(180deg, #f4f6f8 0%, #dfe3e7 48%, #c6cbd1 100%); color: #1d1f24; border-color: rgba(38,41,46,.35); box-shadow: 0 4px 12px rgba(0,0,0,.25); }
+.h-text .h-hinweis { color: #26292e; text-shadow: 0 .5px 0 rgba(255,255,255,.22); }
+.h-text .h-formate { color: #26292e; margin-top: .1477cqw !important; text-shadow: none; }
+/* 14, 15, 16 GRIT-Produktseite Text */
+.ptext.stoff.gritgrund { color: #24272c; background: #c9ccd0; }
+.ptext.stoff.gritgrund::before { background-image: url(bilder/bg_7942_text.jpg); background-position: center bottom; filter: blur(1.5px) saturate(.15) brightness(1.15); }
+.ptext.stoff.gritgrund::after { background: linear-gradient(180deg, rgba(226,229,233,.74), rgba(226,229,233,.6)); }
+.ptext .gkurz{max-width:34em;margin:0 auto 56px;text-align:center}
+.ptext .gkurz h2{font-size:clamp(24px,2.6vw,34px);letter-spacing:.08em;margin:0 0 16px}
+.ptext .gkurz p{font-size:19px;line-height:1.7;margin:0 auto;text-wrap:balance}
+.ptext .gupsell{max-width:640px;margin:72px auto 0;text-align:center}
+.ptext .gupsell h2{font-size:clamp(20px,2.2vw,28px);letter-spacing:.06em;margin:0 0 12px}
+.ptext .gupsell p{font-size:17px;line-height:1.7;margin:0 auto 22px;max-width:34em;text-wrap:balance}
+.ptext .gupsell.leise{margin-top:64px}
+.ptext .gupsell.leise h2{font-size:clamp(16px,1.6vw,20px);margin-bottom:10px}
+.ptext .gupsell.leise p{font-size:16px;margin-bottom:12px}
+.ptext .glink{font:500 16px Barlow,sans-serif;color:inherit;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+.ptext .gupsell.leise + .psys{margin-top:64px}
+@media (max-width: 600px) {
+  .h-mail { width: 100%; }
+  .h-mail-felder { gap: 8px; }
+  .h-text .h-mail { max-width: none; }
+  .held-kolorit .h-hinweis { margin-top: -4px !important; }
+  .h-text .h-wm-titel { width: 62% !important; margin-bottom: 4px !important; }
+  /* Handy: Text steht unter dem Plugin -> Licht gleichmäßig, damit die dunkle Schrift überall lesbar bleibt */
+  .held-grit .held-foto::after { background: rgba(214,218,223,.42); -webkit-mask-image: none; mask-image: none; }
+  .h-mail input { font-size: 10.5px; padding: .75em .7em; }
+  .h-mail button { padding: .8em .9em; }
+}
+
+/* ===================================================================== 235c ===== */
+/* 5 About-Foto: 128 statt 180 px (Handy 100 statt 140 px, gleiches Verhältnis) */
+.ueber-foto img { width: 128px; height: 128px; }
+@media (max-width: 900px) { .ueber-foto img { width: 100px; height: 100px; } }
+/* 6 Startseite: KOLORIT so groß wie möglich (ganze Inhaltsbreite der Bühne, Bühne passt sich der Fensterhöhe an),
+   GRIT im Freebies-Bereich = 75 % der KOLORIT-Höhe. Bühnenbreite KOLORIT: --wk = min(Fensterbreite, (Fensterhöhe − Kopf) / --ak) */
+body.start { --ak: .9200; --wk: min(100vw, calc((100svh - var(--kopf)) / var(--ak))); }
+html.ab body.start { --ak: .8560; }
+.held-start-k { --a: var(--ak); }
+.held-start-k .h-plug { width: 100%; }
+/* KOLORIT-Höhe = 0,94 · W / 1,8254 (Standbild 2300 × 1260); GRIT-Breite = 0,75 · Höhe · 940/1400 = 0,25932 · W */
+.held-ohnekopf .h-plug { width: calc(var(--wk) * .25932); max-width: none; }
+
+/* ===================================================================== 235d: GRIT-Größe Startseite nach Kims Pult (nur ab 601 px) ===== */
+@media (min-width: 601px) {
+  .held-ohnekopf .h-plug { width: calc(var(--wk) * .311184); }   /* 90 % der KOLORIT-Höhe */
+  .held-ohnekopf .h-wm-titel { width: 60% !important; }
+}
+
+/* ===================================================================== 235e: KOLORIT größer auf der Startseite (Kims Soll 1920 × 965) ===== */
+/* --ak vor und ab Launch .736; erster Bildschirm muss nur Plugin + DISCOVER KOLORIT zeigen (E-Mail-Feld, Hinweis, Formate dürfen darunter). */
+body.start, html.ab body.start { --ak: .736; }
+@media (min-width: 601px) { .held-start-k .h-wm { width: 32.2%; } }
+
+/* ===================================================================== 238: Startseite + Produktseiten nach Kims Pult (pult_start, pult_produkt) ===== */
+/* A Startseite – nur ab 601 px (Handy unverändert) */
+@media (min-width: 601px) {
+  /* 1 KOLORIT-Plugin 110 % */
+  body.start { --ak: .8364; }
+  html.ab body.start { --ak: .7782; }
+  /* 2 KOLORIT-Schriftzug */
+  .held-start-k .h-wm { width: 50.6%; }
+  /* 3 „Harmonic Color Processor“ ×1,22, Strich 0,83 px */
+  .held-start-k .h-unter { font-size: max(10.98px, 1.2975cqw) !important; -webkit-text-stroke: .83px currentColor; }
+  /* 4 E-Mail + NOTIFY ME als ein Rahmen, Breite = Schriftzug, mittig */
+  .held-start-k .h-mail { width: 50.6%; margin-left: auto; margin-right: auto; }
+  .held-start-k .h-mail-felder { gap: 0; border: 1px solid rgba(244,238,228,.5); border-radius: 3px;
+    background: rgba(18,15,12,.45); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); overflow: hidden; }
+  .held-start-k .h-mail input { border: 0; border-radius: 0; background: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .held-start-k .h-mail button { border: 0; border-left: 1px solid rgba(244,238,228,.35); border-radius: 0; background: transparent; }
+  .held-start-k .h-mail button:hover { background: rgba(244,238,228,.08); }
+  .held-start-k .h-mail-felder:focus-within { border-color: rgba(244,238,228,.85); }
+  /* 5 GRIT-Plugin so hoch wie das KOLORIT-Plugin */
+  .held-ohnekopf .h-plug { width: calc(var(--wk) * .34576) !important; }
+  /* 6 „Grit“-Schriftzug */
+  .held-ohnekopf .h-wm-titel { width: 65% !important; }
+  /* 7 GRIT-Unterzeile wie Punkt 3, Zweitzeile 0,9 davon (mind. 14 px), Knopf wie DISCOVER KOLORIT */
+  .held-ohnekopf .h-unter { font-size: max(10.98px, calc(var(--wk) * .012975)) !important; -webkit-text-stroke: .83px currentColor; }
+  .held-ohnekopf .h-unter2 { font-size: max(14px, calc(.9 * max(10.98px, calc(var(--wk) * .012975)))) !important; }
+  .held-ohnekopf .h-kauf { font-size: max(11px, calc(var(--wk) * .01034)) !important; }
+}
+/* 8 GRIT-Abteil so hoch wie das KOLORIT-Abteil, Inhalt senkrecht mittig – nur Querformat (--khoehe aus seite.js) */
+@media (min-width: 601px) and (orientation: landscape) {
+  .held-ohnekopf { min-height: var(--khoehe, auto); display: flex; flex-direction: column; justify-content: center; }
+}
+/* 9 Abstand GRIT-Plugin ↔ sichtbarer Text = 2,45 cqw der GRIT-Bühne, Paar waagerecht mittig: seite.js (Verschiebung, Maß hängt an der Textbreite) */
+
+/* B Produktseiten (KOLORIT + GRIT) */
+/* 10 Fließtext Barlow im Inhalt Stärke 500; auf hellen Abschnitten 35 % Richtung #111 */
+body.unterseite #inhalt .ptext :is(p, dd, a.glink) { font-weight: 500; }
+body.unterseite #inhalt .ptext.stoff :is(p, dd, a.glink) { color: color-mix(in srgb, #2b241c 65%, #111); }
+body.unterseite #inhalt .ptext.stoff.gritgrund :is(p, dd, a.glink) { color: color-mix(in srgb, #24272c 65%, #111); }
+body.unterseite #inhalt .ptext.stoff p b { color: inherit; }
+/* 11 Michroma-Überschriften/Begriffe im Inhalt: Strich 0,35 px */
+body.unterseite #inhalt :is(.h-claim, .h-gclaim, .h-datum, .h-mail button, .h-kauf, .h-kauf2, .h-formate, .ptext h2, .ptext h3, .ptext dt) { -webkit-text-stroke: .35px currentColor; }
+/* 12 Feature-Listen: Begriff und Text auf gemeinsamer Grundlinie */
+.ptext .pliste > div { align-items: baseline; }
+.ptext .pliste dt { padding-top: 0; }
+/* 13 E-Mail + NOTIFY ME als ein Rahmen: KOLORIT-Kopf dunkel, GRIT hell */
+@media (min-width: 601px) {
+  .held-produkt-k .h-mail-felder { gap: 0; border: 1px solid rgba(244,238,228,.5); border-radius: 3px; background: rgba(18,15,12,.45); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); overflow: hidden; }
+  .held-produkt-k .h-mail input { border: 0; border-radius: 0; background: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .held-produkt-k .h-mail button { border: 0; border-left: 1px solid rgba(244,238,228,.35); border-radius: 0; background: transparent; }
+  .held-produkt-k .h-mail-felder:focus-within { border-color: rgba(244,238,228,.85); }
+  body.unterseite .h-text .h-mail-felder { gap: 0; border: 1px solid rgba(38,41,46,.35); border-radius: 3px; background: rgba(255,255,255,.55); overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,.12); }
+  body.unterseite .h-text .h-mail input { border: 0; border-radius: 0; background: transparent; }
+  body.unterseite .h-text .h-mail button { border: 0; border-left: 1px solid rgba(38,41,46,.3); border-radius: 0; background: transparent; box-shadow: none; }
+  body.unterseite .h-text .h-mail-felder:focus-within { border-color: rgba(38,41,46,.6); }
+}
+
+/* ===== 239c (Claude, 25.11.) – Startbereich Produktseiten: weniger Text, starker CTA ===== */
+/* KOLORIT: Claim hebt sich ab */
+.held-produkt-k .held-foto::after{content:"";position:absolute;inset:0;pointer-events:none;background:
+  radial-gradient(ellipse 44% 13% at 50% 17.5%, rgba(30,20,10,.50), rgba(30,20,10,0) 100%),
+  radial-gradient(ellipse 28% 17% at 50% 85%, rgba(30,20,10,.38), rgba(30,20,10,0) 100%);}
+.held-produkt-k .h-claim{text-shadow:0 1px 2px rgba(0,0,0,.35),0 2px 18px rgba(0,0,0,.35)}
+/* KOLORIT unter dem Plugin: Datum + Preis, dann CTA, Formate raus aus dem Startbereich */
+.held-produkt-k .h-datum{order:1;font-size:19px;margin-top:10px}
+.held-produkt-k .h-preis-vor{order:2;font-size:15px;margin-top:-4px}
+.held-produkt-k .h-mail{order:3;margin-top:12px}
+.held-produkt-k .h-hinweis{order:4;margin-top:-2px;font-size:11px;opacity:.8}
+.held-produkt-k .h-formate{display:none}
+/* CTA KOLORIT: voller Knopf in Kauf-Farbe */
+.held-produkt-k .h-mail input{height:50px;font-size:15px}
+.held-produkt-k .h-mail button{height:50px;font-size:13.5px;background:#ecd8a0;color:#1a1a1a;border:0;
+  box-shadow:0 6px 16px rgba(0,0,0,.38),0 1px 3px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.45)}
+/* KOLO GRIT rechts: weniger Stufen, Formate raus, CTA groß */
+.held-grit:not(.held-ohnekopf) .h-unter2{font-size:22px;opacity:.85}
+.held-grit:not(.held-ohnekopf) .h-datum{font-size:18px;margin-top:18px}
+.held-grit:not(.held-ohnekopf) .h-mail{margin-top:6px}
+.held-grit:not(.held-ohnekopf) .h-mail input{height:58px;font-size:17px}
+.held-grit:not(.held-ohnekopf) .h-mail button{height:58px;font-size:16px;background:linear-gradient(180deg,#3a3e45 0%,#24272c 100%) !important;color:#f4f6f8 !important;border:0 !important;
+  box-shadow:0 6px 16px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.12)}
+.held-grit:not(.held-ohnekopf) .h-hinweis{font-size:13px;opacity:.7;margin-top:-2px}
+.held-grit:not(.held-ohnekopf) .h-formate{display:none}
+/* 239e – KOLO-GRIT-Beschreibung nur Text, zwei Stufen (12er-Raster, 1040 px) */
+.ptext.gritgrund .gtx{max-width:1040px;margin:0 auto}
+.ptext.gritgrund .gtx-haupt{display:grid;grid-template-columns:1fr 1fr;column-gap:72px;margin-bottom:72px}
+.ptext.gritgrund .gtx-haupt h2{font:400 34px/1.2 Michroma,sans-serif;letter-spacing:.05em;margin:0 0 16px}
+.ptext.gritgrund .gtx-haupt p{font:500 20px/1.55 var(--pf),sans-serif;margin:0;max-width:440px}
+.ptext.gritgrund .gtx-neben{display:grid;grid-template-columns:repeat(4,1fr);column-gap:32px}
+.ptext.gritgrund .gtx-neben>div{border-top:1px solid rgba(36,39,44,.28);padding-top:18px}
+.ptext.gritgrund .gtx-neben h3{font:400 16px/1.3 Michroma,sans-serif;letter-spacing:.08em;margin:0 0 10px}
+.ptext.gritgrund .gtx-neben p{font:500 16px/1.5 var(--pf),sans-serif;margin:0}
+.ptext.gritgrund .gupsell{margin-top:96px}
+.ptext.gritgrund .psys{max-width:1040px}
+/* ===== 239f (Claude, 25.11.) – Startseite KOLORIT-Bereich wie 239c: weniger Text, starker CTA ===== */
+.held-start-k .h-kauf{order:1}
+.held-start-k .h-datum{order:2;display:block;font:400 19px/1.3 Michroma,sans-serif;letter-spacing:.03em;margin-top:18px;color:var(--text)}
+.held-start-k .h-mail{order:3;margin-top:10px}
+.held-start-k .h-hinweis{order:4;margin-top:-2px;font-size:11px;opacity:.8}
+.held-start-k .h-formate{display:none}
+.held-start-k .h-mail input{height:50px;font-size:15px}
+.held-start-k .h-mail button{height:50px;font-size:13.5px;background:#ecd8a0 !important;color:#1a1a1a !important;border:0 !important;
+  box-shadow:0 6px 16px rgba(0,0,0,.38),0 1px 3px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.45)}
+/* ===== 239f (Claude, 25.11.) – Startseite KOLORIT-Bereich wie 239c: weniger Text, starker CTA ===== */
+.held-start-k .h-kauf{order:1}
+.held-start-k .h-datum{order:2;font-size:19px;margin-top:14px !important}
+.held-start-k .h-mail{order:3;margin-top:4px}
+.held-start-k .h-mail-felder{border:0 !important}
+.held-start-k .h-hinweis{order:4;margin-top:-2px;font-size:11px;opacity:.8}
+.held-start-k .h-formate{display:none}
+.held-start-k .h-mail input{height:50px;font-size:15px;border:1px solid rgba(244,238,228,.5) !important;background:rgba(20,16,12,.35) !important}
+.held-start-k .h-mail button{height:50px;font-size:13.5px;background:#ecd8a0 !important;color:#1a1a1a !important;border:0 !important;
+  box-shadow:0 6px 16px rgba(0,0,0,.38),0 1px 3px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.45)}
+
+/* ===== 239b – Moonbase-Newsletter: Meldung unter Feld + Knopf, Schrift wie .h-hinweis ===== */
+.h-mail [data-moonbase-message]{margin:6px 0 0;font:500 max(11px, 1.0103cqw) Barlow, sans-serif;color:#f4eee4;text-shadow:0 1px 4px rgba(0,0,0,.7), 0 0 10px rgba(0,0,0,.35);text-align:center;text-wrap:balance}
+.h-mail [data-moonbase-message]:empty{display:none}
+.h-text .h-mail [data-moonbase-message]{color:#26292e;text-shadow:0 .5px 0 rgba(255,255,255,.22)}
+.held-produkt-k .h-mail [data-moonbase-message],.held-start-k .h-mail [data-moonbase-message]{font-size:11px;opacity:.8}
+.held-grit:not(.held-ohnekopf) .h-mail [data-moonbase-message]{font-size:13px;opacity:.7}
+.h-mail[data-moonbase-state="subscribed"] .h-mail-felder,.h-mail[data-moonbase-state="confirmation_sent"] .h-mail-felder{display:none}
+
+/* ===== 239 – Fehlerkorrektur Handy/Tablet: Breiten aus 239c/239f nur ab 1024 px, darunter Breite wie Stand 238 ===== */
+@media (min-width: 1024px) {
+  .held-produkt-k .h-mail{width:min(600px,62%)}
+  .held-produkt-k .h-mail button{padding:0 1.8em}
+  .held-grit:not(.held-ohnekopf) .h-mail button{padding:0 1.6em}
+  .held-start-k .h-mail{width:min(600px,62%) !important}
+  .held-start-k .h-mail button{padding:0 1.8em}
+}
+/* GRIT-Text (239e): bis 600 px einspaltig, 601–1023 px Hauptteil einspaltig + Nebenteil zweispaltig */
+@media (max-width: 1023px) {
+  .ptext.gritgrund .gtx-haupt{grid-template-columns:1fr;row-gap:40px}
+  .ptext.gritgrund .gtx-neben{grid-template-columns:1fr 1fr;row-gap:32px}
+}
+@media (max-width: 600px) {
+  .ptext.gritgrund .gtx-neben{grid-template-columns:1fr}
+}
+@media (max-width: 1023px) {
+  .held-produkt-k .h-mail button,.held-start-k .h-mail button,.held-grit:not(.held-ohnekopf) .h-mail button{font-size:max(9px, .8508cqw)}
+}
+
+/* ===== 240b (Claude, 25.11.) – Hörbeispiele als schlichte Liste ===== */
+.hl{max-width:640px;margin:0 auto clamp(56px,7vw,104px);color:#26292e}
+.hl-titel{font:400 22px/1.2 Michroma,sans-serif !important;letter-spacing:.06em !important;margin:0 0 6px !important;text-align:left;color:#26292e}
+.hl-unter{font:500 16px/1.5 Barlow,sans-serif !important;margin:0 0 18px !important;opacity:.75 !important;text-align:left}
+.hl-liste{list-style:none;margin:0;padding:0;border-top:1px solid rgba(38,41,46,.22)}
+.hl-zeile{display:grid;grid-template-columns:28px 120px 1fr 36px auto;align-items:center;gap:16px;padding:13px 0;border-bottom:1px solid rgba(38,41,46,.22)}
+.hl-play{width:28px;height:28px;border-radius:50%;border:1.5px solid #26292e;background:transparent;display:grid;place-items:center;cursor:pointer;padding:0}
+.hl-dreieck{width:0;height:0;border-left:8px solid #26292e;border-top:5px solid transparent;border-bottom:5px solid transparent;margin-left:2px}
+.hl-pause{width:8px;height:9px;border-left:2.5px solid #26292e;border-right:2.5px solid #26292e}
+.hl-name{font:500 17px/1 Barlow,sans-serif}
+.hl-zeit{height:2px;background:rgba(38,41,46,.18);border-radius:1px;overflow:hidden}
+.hl-zeit span{display:block;height:100%;background:#26292e}
+.hl-dauer{font:400 13px/1 "IBM Plex Mono",monospace;opacity:.6;text-align:right}
+.hl-ab{display:flex;align-items:center;gap:8px;font:400 11px/1 Michroma,sans-serif;letter-spacing:.12em}
+.hl-ab button{font:inherit;letter-spacing:inherit;background:none;border:0;padding:4px 0;color:rgba(38,41,46,.45);cursor:pointer;display:inline-flex;align-items:center;gap:7px;text-transform:uppercase}
+.hl-ab button.aktiv{color:#26292e}
+.hl-trenn{opacity:.35}
+.hl-led{width:7px;height:7px;border-radius:50%;background:rgba(38,41,46,.25);display:inline-block}
+.hl-led.an{background:#e8a33a;box-shadow:0 0 5px rgba(232,163,58,.8)}
+@media (max-width:600px){.hl-zeile{grid-template-columns:28px 1fr auto;row-gap:10px}.hl-zeit{grid-column:1/-1;order:5}.hl-dauer{display:none}}
+@media (max-width:600px){.hl-zeile:not(.spielt) .hl-zeit{display:none}}
+/* 240b: Unterzeile so kräftig wie der Text unter den Plugin-Abschnitten (Kim 02:35) */
+.hl-unter{font-size:18px !important;opacity:1 !important;color:#221d18 !important}
+/* 240b: Titel + Unterzeile mittig wie die übrigen Abschnitte (Kim 02:36) */
+.hl-titel,.hl-unter{text-align:center !important}
+
+/* ===== 241 (Claude, 25.11.) – eine Inhaltsbreite, Fuß bündig, Umbrüche ===== */
+@media (min-width:768px){
+  .fuss-spalten{display:flex;justify-content:space-between;width:min(860px,100%);gap:0}
+  .fuss-spalten nav{min-width:0}
+}
+.ptext.gritgrund .gtx,.ptext.gritgrund .psys{max-width:860px}
+.ptext .psys .pklein{max-width:none}
+.ptext p,.ptext dd{text-wrap:pretty}
+.ptext .ptrio p,.ptext.gritgrund .gtx p{text-wrap:balance}
