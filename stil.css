@@ -171,7 +171,7 @@ a.plugin:hover { transform: translateY(-3px); }
 .ueber-raster { display: flex; align-items: center; justify-content: center; gap: 44px; max-width: 860px; }
 .ueber-text { flex: 0 1 560px; text-align: left; }
 .ueber-text p { margin: 0; max-width: none; }
-.ueber-foto img { width: 180px; height: 180px; border-radius: 6px; object-fit: cover; box-shadow: 0 18px 40px -12px rgba(0,0,0,.8); }
+.ueber-foto img { width: 180px; height: 180px; border-radius: 6px; object-fit: cover; }
 .fuss-logo { height: 26px; width: auto; opacity: .9; margin-bottom: 4px; }
 @media (max-width: 900px) {
   .ueber-raster { flex-direction: column-reverse; gap: 22px; }
@@ -817,3 +817,30 @@ body.unterseite { --wk: min(100vw, calc((100svh - var(--kopf)) / .8364)); }
 .kopf-sprache a { color: inherit; text-decoration: none; }
 .kopf-sprache a:hover { color: #ece6dc; }
 @media (min-width: 1024px) { html[lang="de"] .ptext.gritgrund .gtx-haupt p { max-width: 380px; } }
+
+/* 248: Stoff-Bereiche hart beschneiden (::before ragt mit inset:-60px über den Bereich hinaus; ohne Beschnitt liegt dieser Rand als dunklerer Streifen über dem Fuß) */
+.ptext.stoff { clip-path: inset(0); }
+/* 248b: Handbuchseite schlicht – ein heller Stoff, beide Plugins nebeneinander (gleich hoch, unten bündig), darunter je eine PDF-Zeile */
+.handbuch248 { --hbh: min(380px, 27vw); min-height: calc(100vh - 190px); min-height: calc(100svh - 190px); padding-top: calc(var(--kopf) + clamp(48px, 7vw, 104px)); padding-bottom: clamp(56px, 8vw, 120px); text-align: center; }
+.hb-paar { display: flex; justify-content: center; align-items: flex-end; gap: clamp(48px, 6vw, 112px); }
+.hb-plugin { display: flex; flex-direction: column; align-items: center; }
+.hb-bild { display: block; height: var(--hbh); width: auto; filter: drop-shadow(0 20px 30px rgba(0,0,0,.55)); }
+body.unterseite #inhalt .ptext.handbuch248 p.hb-dl { max-width: none; margin: 28px 0 0; white-space: nowrap; width: 0; display: flex; justify-content: center; }   /* 248c: Breite 0 -> Spalte = Bildbreite, Zeile mittig darunter */
+.hb-dl-titel { margin-right: .28em; }
+.hb-dl > span { flex-shrink: 0; }   /* .ptext * setzt min-width:0 -> ohne das schrumpfen die Teile auf 0 und die Zeile läuft nach rechts aus */
+.hb-dl-links { display: inline-block; }
+/* 248c: Ecken wie .h-plug auf Start-/Produktseite: Radius/Bildbreite bei 1920 dort KOLORIT 8,63/1017 = 0,0085, GRIT 11/374 = 0,0294; nie unter 5 px (clamp-Minimum dort) */
+.hb-bild.hb-kolorit { border-radius: max(5px, calc(var(--hbh) * 1150 / 630 * .0085)); }
+.hb-bild.hb-grit { border-radius: max(5px, calc(var(--hbh) * 470 / 700 * .0294)); }
+.hb-dl a { color: inherit; text-decoration: underline; text-decoration-color: var(--gelb-dunkel); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.hb-dl a:hover { text-decoration-color: currentColor; }
+@media (max-width: 1100px) {
+  .hb-paar { flex-direction: column; align-items: center; gap: 64px; }
+  .hb-bild.hb-kolorit { height: auto; width: min(620px, 100%); }
+  .hb-bild.hb-grit { height: auto; width: min(300px, 62%); }
+  .hb-plugin { width: 100%; }
+  body.unterseite #inhalt .ptext.handbuch248 p.hb-dl { white-space: normal; text-wrap: balance; width: auto; display: block; }
+  .hb-dl-titel { margin-right: 0; }
+  .hb-bild.hb-kolorit { border-radius: max(5px, calc(min(620px, 100vw - 2 * clamp(20px, 5vw, 72px)) * .0085)); }
+  .hb-bild.hb-grit { border-radius: max(5px, calc(min(300px, (100vw - 2 * clamp(20px, 5vw, 72px)) * .62) * .0294)); }
+}

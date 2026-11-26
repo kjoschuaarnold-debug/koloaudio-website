@@ -73,5 +73,5 @@ window.KOLO.text.de = Object.assign({}, window.KOLO.text.en, {
   copyright: "© 2026 KOLO AUDIO. Alle Rechte vorbehalten.",
   legal_contact: "Kontakt", legal_imprint: "Impressum", legal_privacy: "Datenschutz",
   mb_note: "Unser Online-Wiederverkäufer Moonbase ist Verkäufer (Merchant of Record) für alle Bestellungen.",
-  menu_about: "Über uns", menu_manuals: "Handbücher"
+  menu_about: "Über uns", menu_manuals: "Manuals"
 });
