@@ -159,7 +159,7 @@
   }
   function lade(Z) {
     if (!Z.laden) Z.laden = Promise.all(["ohne", "mit"].map(function (v) {
-      return fetch((document.documentElement.lang === "de" ? "../" : "") + "audio/kolorit_" + Z.name + "_" + v + ".mp3").then(function (r) { return r.arrayBuffer(); }).then(dekodiere);
+      return fetch((document.documentElement.lang === "de" ? "../" : "") + "audio/kolorit_" + Z.name + "_" + v + ".mp3?v=251").then(function (r) { return r.arrayBuffer(); }).then(dekodiere);
     })).then(function (p) { Z.puffer = p; Z.laenge = Math.min(p[0].duration, p[1].duration); Z.dauer.textContent = fmt(Z.laenge); return p; });
     return Z.laden;
   }
