@@ -118,6 +118,7 @@
 })();
 // 240: Hörbeispiele (Liste .hl auf der KOLORIT-Seite). Je Zeile laufen ohne/mit gleichzeitig und sample-genau (Web Audio, gleiche Startzeit);
 // Dry/KOLORIT blendet nur die Lautstärke um (20 ms, kein Neustart). Laden erst beim ersten Play. Immer nur eine Zeile spielt.
+// 249: Ruhe = KOLORIT gewählt, LED nur wenn die Zeile spielt UND KOLORIT gewählt ist; Play behält die gewählte Seite; dunkle Markierung gleitet (.hl-schieber).
 (function () {
   var liste = document.querySelector(".hl-liste"), AC = window.AudioContext || window.webkitAudioContext;
   if (!liste || !AC) return;
@@ -125,15 +126,24 @@
   function fmt(s) { s = Math.round(s); return Math.floor(s / 60) + ":" + ("0" + (s % 60)).slice(-2); }
   function dekodiere(b) { return new Promise(function (ok, fehler) { ctx.decodeAudioData(b, ok, fehler); }); }
   var zeilen = [].slice.call(liste.querySelectorAll(".hl-zeile")).map(function (z, i) {
-    var ab = z.querySelectorAll(".hl-ab button");
-    return { z: z, name: NAMEN[i], play: z.querySelector(".hl-play"), balken: z.querySelector(".hl-zeit span"), dauer: z.querySelector(".hl-dauer"),
+    var ab = z.querySelectorAll(".hl-ab button"), gr = z.querySelector(".hl-ab"), sch = document.createElement("span");
+    sch.className = "hl-schieber"; sch.setAttribute("aria-hidden", "true"); gr.insertBefore(sch, gr.firstChild); gr.classList.add("mit-schieber");
+    return { z: z, gr: gr, sch: sch, name: NAMEN[i], play: z.querySelector(".hl-play"), balken: z.querySelector(".hl-zeit span"), dauer: z.querySelector(".hl-dauer"),
       dry: ab[0], kol: ab[1], led: z.querySelector(".hl-led"), titel: z.querySelector(".hl-name").textContent,
       mit: false, laden: null, puffer: null, quellen: null, g: null, t0: 0, pos: 0, laenge: 0 };
   }).filter(function (Z) { return Z.name; });
 
-  function schalter(Z, mit) {
+  function schieber(Z, sofort) {   // 249: Markierung unter die gewählte Seite legen (sofort = ohne Gleiten)
+    var b = Z.mit ? Z.kol : Z.dry, rb = b.getBoundingClientRect(), rg = Z.gr.getBoundingClientRect();
+    if (sofort) Z.sch.style.transition = "none";
+    Z.sch.style.width = rb.width + "px"; Z.sch.style.height = rb.height + "px";
+    Z.sch.style.transform = "translate(" + (rb.left - rg.left - Z.gr.clientLeft) + "px," + (rb.top - rg.top - Z.gr.clientTop) + "px)";
+    if (sofort) { void Z.sch.offsetWidth; Z.sch.style.transition = ""; }
+  }
+  function schalter(Z, mit, sofort) {
     Z.mit = mit;
-    Z.dry.classList.toggle("aktiv", !mit); Z.kol.classList.toggle("aktiv", mit); Z.led.classList.toggle("an", mit);
+    Z.dry.classList.toggle("aktiv", !mit); Z.kol.classList.toggle("aktiv", mit); Z.led.classList.toggle("an", mit && Z.z.classList.contains("spielt"));
+    schieber(Z, sofort);
     Z.dry.setAttribute("aria-pressed", String(!mit)); Z.kol.setAttribute("aria-pressed", String(mit));
     if (Z.g) {
       var n = ctx.currentTime;
@@ -143,7 +153,7 @@
     }
   }
   function zeigeSpielt(Z, an) {
-    Z.z.classList.toggle("spielt", an);
+    Z.z.classList.toggle("spielt", an); Z.led.classList.toggle("an", an && Z.mit);
     Z.play.innerHTML = an ? '<span class="hl-pause"></span>' : '<span class="hl-dreieck"></span>';
     Z.play.setAttribute("aria-label", (an ? "Pause " : "Play ") + Z.titel);
   }
@@ -169,7 +179,7 @@
     if (!ctx) ctx = new AC();
     if (ctx.state === "suspended") ctx.resume();
     if (aktiv && aktiv !== Z) anhalten(aktiv, true);
-    aktiv = Z; schalter(Z, true); zeigeSpielt(Z, true);
+    aktiv = Z; zeigeSpielt(Z, true);
     lade(Z).then(function (p) {
       if (aktiv !== Z || Z.quellen) return;
       var t = ctx.currentTime + 0.05;
@@ -189,9 +199,14 @@
     requestAnimationFrame(lauf);
   }
   zeilen.forEach(function (Z) {
-    anhalten(Z, true); schalter(Z, false);
+    anhalten(Z, true); schalter(Z, true, true);
     Z.play.addEventListener("click", function () { if (aktiv === Z) anhalten(Z, false); else starte(Z); });
     Z.dry.addEventListener("click", function () { schalter(Z, false); });
     Z.kol.addEventListener("click", function () { schalter(Z, true); });
   });
+  // 249: Markierung neu vermessen, wenn sich die Schalterbreite ändert (Schrift geladen, Fenster)
+  function messen() { zeilen.forEach(function (Z) { schieber(Z, true); }); }
+  if (window.ResizeObserver) { var ro = new ResizeObserver(messen); zeilen.forEach(function (Z) { ro.observe(Z.gr); }); }
+  else window.addEventListener("resize", messen);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(messen);
 })();

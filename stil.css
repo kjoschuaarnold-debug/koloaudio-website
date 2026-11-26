@@ -844,3 +844,11 @@ body.unterseite #inhalt .ptext.handbuch248 p.hb-dl { max-width: none; margin: 28
   .hb-bild.hb-kolorit { border-radius: max(5px, calc(min(620px, 100vw - 2 * clamp(20px, 5vw, 72px)) * .0085)); }
   .hb-bild.hb-grit { border-radius: max(5px, calc(min(300px, (100vw - 2 * clamp(20px, 5vw, 72px)) * .62) * .0294)); }
 }
+
+/* 249: Hörbeispiele – Schiebeschalter: dunkle Markierung ist ein eigenes Element und gleitet (150 ms); Hover nur mit Maus */
+.hl-ab.mit-schieber { position: relative; }
+.hl-ab.mit-schieber button { position: relative; z-index: 1; transition: color .15s ease, background-color .15s ease; }
+.hl-ab.mit-schieber button.aktiv { background: none; }
+.hl-schieber { position: absolute; left: 0; top: 0; width: 0; height: 0; border-radius: 999px; background: #26292e; pointer-events: none; transition: transform .15s ease, width .15s ease; }
+@media (hover: hover) and (pointer: fine) { .hl-ab button:not(.aktiv):hover { background: rgba(255,255,255,.45); } }
+@media (prefers-reduced-motion: reduce) { .hl-schieber, .hl-ab.mit-schieber button { transition: none; } }
