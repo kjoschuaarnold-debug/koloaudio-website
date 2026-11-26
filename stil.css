@@ -693,7 +693,7 @@ body.unterseite #inhalt :is(.h-claim, .h-gclaim, .h-datum, .h-mail button, .h-ka
 .hl-zeit span{display:block;height:100%;background:#26292e}
 .hl-dauer{font:400 13px/1 "IBM Plex Mono",monospace;opacity:.6;text-align:right}
 .hl-ab{display:flex;align-items:center;gap:8px;font:400 11px/1 Michroma,sans-serif;letter-spacing:.12em}
-.hl-ab button{font:inherit;letter-spacing:inherit;background:none;border:0;padding:4px 0;color:rgba(38,41,46,.45);cursor:pointer;display:inline-flex;align-items:center;gap:7px;text-transform:uppercase}
+.hl-ab button{font:inherit;letter-spacing:inherit;background:none;border:0;padding:4px 0;color:rgba(38,41,46,.72);cursor:pointer;display:inline-flex;align-items:center;gap:7px;text-transform:uppercase}
 .hl-ab button.aktiv{color:#26292e}
 .hl-trenn{opacity:.35}
 .hl-led{width:7px;height:7px;border-radius:50%;background:rgba(38,41,46,.25);display:inline-block}
@@ -739,12 +739,6 @@ body.unterseite #inhalt :is(.h-claim, .h-gclaim, .h-datum, .h-mail button, .h-ka
 
 /* 19 Kopf: Hauptpunkte als Menü (ab 901 px sichtbar), Fuß nur noch eine Zeile */
 .kopf-nav { display: none; }
-@media (min-width: 901px) {
-  .kopf-nav { display: flex; gap: 34px; position: absolute; left: 50%; transform: translateX(-50%); }
-  .kopf-nav a { font: 400 11px/1 Michroma, sans-serif; letter-spacing: .16em; color: #ece6dc; text-decoration: none; opacity: .85; }
-  .kopf-nav a:hover { opacity: 1; color: #ecd8a0; }
-  .kopf-menu { display: none; }
-}
 .fuss242 { gap: 12px; padding: 30px 24px 30px; }
 .fuss-logo-link { display: block; }
 .fuss-zeile { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 26px; font-size: 14px; }
