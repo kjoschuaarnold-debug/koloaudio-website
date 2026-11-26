@@ -64,3 +64,14 @@ window.KOLO = {
     }
   }
 };
+
+// 243: deutsche Texte (Claude, sinngemäß; Kim liest gegen)
+window.KOLO.text.de = Object.assign({}, window.KOLO.text.en, {
+  a_head: "Über KOLO AUDIO",
+  a_1: "KOLO AUDIO ist ein unabhängiges Plugin-Studio aus dem Norden Deutschlands, gegründet von Kim Joschua Arnold.",
+  a_sig: "Kim Joschua Arnold, Sound, Design und Konzept",
+  copyright: "© 2026 KOLO AUDIO. Alle Rechte vorbehalten.",
+  legal_contact: "Kontakt", legal_imprint: "Impressum", legal_privacy: "Datenschutz",
+  mb_note: "Unser Online-Wiederverkäufer Moonbase ist Verkäufer (Merchant of Record) für alle Bestellungen.",
+  menu_about: "Über uns", menu_manuals: "Handbücher"
+});

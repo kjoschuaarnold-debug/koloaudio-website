@@ -812,3 +812,8 @@ body.unterseite { --wk: min(100vw, calc((100svh - var(--kopf)) / .8364)); }
 .h-mail .h-mail-felder button { flex: 0 0 auto; height: auto !important; margin: 0 !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; }
 .h-mail .h-mail-felder:focus-within { border-color: rgba(38,41,46,.65) !important; box-shadow: 0 0 0 3px rgba(236,216,160,.45), 0 6px 16px rgba(0,0,0,.16) !important; }
 @media (max-width: 600px) { .h-mail .h-mail-felder { height: 54px; } }
+
+/* 246 (aus 243): Sprachumschalter als Links; Deutsch: Depth und Grit wieder gleich viele Zeilen */
+.kopf-sprache a { color: inherit; text-decoration: none; }
+.kopf-sprache a:hover { color: #ece6dc; }
+@media (min-width: 1024px) { html[lang="de"] .ptext.gritgrund .gtx-haupt p { max-width: 380px; } }

@@ -7,7 +7,7 @@
   document.documentElement.dataset.datum = "a1";
   document.documentElement.dataset.wortmarke = q.get("wortmarke") === "farbig" ? "farbig" : "einfarbig";   // 228: Kim entscheidet
   const istPlatzhalter = (v) => !v || /^[A-Z0-9_]+$/.test(v);
-  const t = K.text.en;
+  const t = K.text[document.documentElement.lang] || K.text.en;
   $$("[data-t]").forEach((el) => { const v = t[el.dataset.t]; if (typeof v === "string") el.textContent = v; });
   $$("[data-t-ph]").forEach((el) => { const v = t[el.dataset.tPh]; if (v) el.placeholder = v; });
   $$("[data-preiszeile]").forEach((el) => { el.textContent = t.priceLine(K.price); });
@@ -149,7 +149,7 @@
   }
   function lade(Z) {
     if (!Z.laden) Z.laden = Promise.all(["ohne", "mit"].map(function (v) {
-      return fetch("audio/kolorit_" + Z.name + "_" + v + ".mp3").then(function (r) { return r.arrayBuffer(); }).then(dekodiere);
+      return fetch((document.documentElement.lang === "de" ? "../" : "") + "audio/kolorit_" + Z.name + "_" + v + ".mp3").then(function (r) { return r.arrayBuffer(); }).then(dekodiere);
     })).then(function (p) { Z.puffer = p; Z.laenge = Math.min(p[0].duration, p[1].duration); Z.dauer.textContent = fmt(Z.laenge); return p; });
     return Z.laden;
   }
