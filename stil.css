@@ -834,7 +834,7 @@ body.unterseite #inhalt .ptext.handbuch248 p.hb-dl { max-width: none; margin: 28
 .hb-bild.hb-grit { border-radius: max(5px, calc(var(--hbh) * 470 / 700 * .0294)); }
 .hb-dl a { color: inherit; text-decoration: underline; text-decoration-color: var(--gelb-dunkel); text-decoration-thickness: 2px; text-underline-offset: 4px; }
 .hb-dl a:hover { text-decoration-color: currentColor; }
-@media (max-width: 1100px) {
+@media (max-width: 1380px) {   /* 255b: Umbruchpunkt 1100 -> 1380 px (Platz für Italiano, Lücke mit „PDF:“ ≥ 22 px) */
   .hb-paar { flex-direction: column; align-items: center; gap: 64px; }
   .hb-bild.hb-kolorit { height: auto; width: min(620px, 100%); }
   .hb-bild.hb-grit { height: auto; width: min(300px, 62%); }
