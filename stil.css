@@ -852,3 +852,14 @@ body.unterseite #inhalt .ptext.handbuch248 p.hb-dl { max-width: none; margin: 28
 .hl-schieber { position: absolute; left: 0; top: 0; width: 0; height: 0; border-radius: 999px; background: #26292e; pointer-events: none; transition: transform .15s ease, width .15s ease; }
 @media (hover: hover) and (pointer: fine) { .hl-ab button:not(.aktiv):hover { background: rgba(255,255,255,.45); } }
 @media (prefers-reduced-motion: reduce) { .hl-schieber, .hl-ab.mit-schieber button { transition: none; } }
+
+/* 253: ™ neben dem KOLO-AUDIO-Logo (Marke angemeldet, nicht eingetragen: nur ™, kein R im Kreis). Eigenes Element, absolut -> Logo und Abstände unverändert.
+   Größe: sichtbare ™-Höhe = 32 % der Logo-Höhe (Barlow 500: Glyphe 0,351 em) -> font-size = Logo-Höhe × 0,32 / 0,351.
+   Oben bündig: Glyphen-Oberkante liegt 0,2 em unter der Kastenoberkante (line-height 1) -> top: -0,2 em. */
+.kopf-logo, .fuss-logo-link { position: relative; }
+.kopf-logo { --lh: 34px; }
+@media (max-width: 900px) { .kopf-logo { --lh: 30px; } }
+.fuss-logo-link { --lh: 26px; }
+/* 253c A: ™-Tinte 19.0 % der Logo-Höhe, Oberkante bei 0.0402 × Logo-Höhe, linke Tintenkante bei 4.0418 × Logo-Höhe (alles proportional zu --lh). */
+.tm { position: absolute; left: calc(var(--lh) * 4.0298); top: calc(var(--lh) * -0.0680); font: 400 calc(var(--lh) * 0.5413)/1 Barlow, sans-serif; color: #f3efe8; opacity: 0.7; pointer-events: none; white-space: nowrap; }
+.fuss-logo-link .tm { opacity: 0.63; }
