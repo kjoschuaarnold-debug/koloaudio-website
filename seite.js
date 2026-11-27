@@ -210,3 +210,34 @@
   else window.addEventListener("resize", messen);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(messen);
 })();
+
+// 257: Handbuch-Knopf (/manual/): Haupt-Knopf öffnet das PDF in der Browsersprache (erste passende aus en/de/fr/es/ja/pt/it, sonst Seitensprache);
+// der Pfeil klappt die Sprachliste auf (Klick daneben oder Esc schließt; Pfeiltasten, Pos1/Ende, Tab).
+(function () {
+  var ks = [].slice.call(document.querySelectorAll(".hb-knopf"));
+  if (!ks.length) return;
+  var CODES = ["en", "de", "fr", "es", "ja", "pt", "it"], wahl = null;
+  var sprachen = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ""];
+  for (var i = 0; i < sprachen.length && !wahl; i++) { var c = String(sprachen[i]).toLowerCase().split("-")[0]; if (CODES.indexOf(c) >= 0) wahl = c; }
+  if (!wahl) wahl = document.documentElement.lang === "de" ? "de" : "en";
+  ks.forEach(function (k) {
+    var haupt = k.querySelector(".hb-knopf-haupt"), pfeil = k.querySelector(".hb-knopf-pfeil"), liste = k.querySelector(".hb-liste"), links = [].slice.call(liste.querySelectorAll("a"));
+    links.forEach(function (a) { if ((a.getAttribute("lang") || "").split("-")[0] === wahl) { haupt.setAttribute("href", a.getAttribute("href")); haupt.setAttribute("hreflang", wahl); } });
+    function auf(fokus) { ks.forEach(function (x) { if (x !== k) x.zu(false); }); liste.hidden = false; liste.classList.remove("nach-oben"); var sec = k.closest(".handbuch248"), lb = liste.getBoundingClientRect(); if (sec && lb.bottom > sec.getBoundingClientRect().bottom - 8) liste.classList.add("nach-oben");   /* Abschnitt schneidet ab (clip-path) -> nach oben */
+      pfeil.setAttribute("aria-expanded", "true"); if (fokus) links[0].focus(); }
+    k.zu = function (fokus) { if (liste.hidden) return; liste.hidden = true; pfeil.setAttribute("aria-expanded", "false"); if (fokus) pfeil.focus(); };
+    pfeil.addEventListener("click", function (e) { if (liste.hidden) auf(e.detail === 0); else k.zu(false); });   // detail 0 = per Tastatur ausgelöst
+    pfeil.addEventListener("keydown", function (e) { if (e.key === "ArrowDown") { e.preventDefault(); auf(true); } });
+    liste.addEventListener("keydown", function (e) {
+      var n = links.indexOf(document.activeElement), m = links.length;
+      if (e.key === "ArrowDown") { e.preventDefault(); links[(n + 1) % m].focus(); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); links[(n - 1 + m) % m].focus(); }
+      else if (e.key === "Home") { e.preventDefault(); links[0].focus(); }
+      else if (e.key === "End") { e.preventDefault(); links[m - 1].focus(); }
+      else if (e.key === "Tab") k.zu(false);
+    });
+    links.forEach(function (a) { a.addEventListener("click", function () { k.zu(false); }); });
+  });
+  document.addEventListener("click", function (e) { ks.forEach(function (k) { if (!k.contains(e.target)) k.zu(false); }); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") ks.forEach(function (k) { k.zu(k.contains(document.activeElement)); }); });
+})();

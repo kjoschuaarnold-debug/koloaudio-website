@@ -863,3 +863,16 @@ body.unterseite #inhalt .ptext.handbuch248 p.hb-dl { max-width: none; margin: 28
 /* 253c A: ™-Tinte 19.0 % der Logo-Höhe, Oberkante bei 0.0402 × Logo-Höhe, linke Tintenkante bei 4.0418 × Logo-Höhe (alles proportional zu --lh). */
 .tm { position: absolute; left: calc(var(--lh) * 4.0298); top: calc(var(--lh) * -0.0680); font: 400 calc(var(--lh) * 0.5413)/1 Barlow, sans-serif; color: #f3efe8; opacity: 0.7; pointer-events: none; white-space: nowrap; }
 .fuss-logo-link .tm { opacity: 0.63; }
+
+/* ===== 257: Handbuch-Knopf statt PDF-Zeile – ein Knopf je Plugin, Pfeil klappt die Sprachliste auf (Pillenform wie die Schalter der Hörbeispiele, Schrift wie die bisherigen PDF-Links) ===== */
+.hb-knopf { position: relative; display: inline-flex; align-items: stretch; margin-top: 28px; border: 1px solid rgba(38,41,46,.45); border-radius: 999px; padding: 2px; font: 500 15px/1 Barlow, sans-serif; letter-spacing: .01em; }
+.hb-knopf-haupt { display: inline-flex; align-items: center; padding: 7px 11px 7px 14px; border-radius: 999px 0 0 999px; color: #26292e; text-decoration: none; white-space: nowrap; }
+.hb-knopf-pfeil { display: inline-flex; align-items: center; font: inherit; background: none; border: 0; border-left: 1px solid rgba(38,41,46,.3); padding: 7px 12px 7px 10px; color: #26292e; cursor: pointer; border-radius: 0 999px 999px 0; }
+.hb-knopf-pfeil[aria-expanded="true"] .hb-knopf-dreieck { transform: rotate(180deg); }
+@media (hover: hover) and (pointer: fine) { .hb-knopf-haupt:hover, .hb-knopf-pfeil:hover { background: rgba(255,255,255,.45); } }
+.hb-knopf-haupt:focus-visible, .hb-knopf-pfeil:focus-visible { outline: 2px solid #26292e; outline-offset: 2px; }
+.hb-liste { position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%); z-index: 5; min-width: 100%; margin: 0; padding: 6px 0; list-style: none; background: #f4eee4; border: 1px solid rgba(38,41,46,.25); border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.18); text-transform: none; letter-spacing: 0; }
+.hb-liste.nach-oben { top: auto; bottom: calc(100% + 6px); }
+.hb-liste li { margin: 0; padding: 0; }
+.hb-liste a { display: block; padding: 8px 18px; font: 500 16px/1.2 Barlow, sans-serif; color: #26292e; text-decoration: none; white-space: nowrap; text-align: left; }
+.hb-liste a:hover, .hb-liste a:focus-visible { background: rgba(38,41,46,.08); outline: none; }
