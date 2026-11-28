@@ -57,7 +57,7 @@ window.KOLO = {
       f_head: "Formats", f_1: "VST3", f_2: "AU", f_3: "macOS", f_4: "Windows", f_5: "AAX coming soon", f_6: "Tested in Ableton Live, Logic Pro and FL Studio",
       fs_products: "Products", fs_resources: "Resources", fs_support: "Support", fs_company: "Company",
       fs_downloads: "Downloads", fs_manual_k: "KOLORIT manual", fs_manual_g: "KOLO GRIT manual", fs_press: "Press", fs_faq: "FAQ", fs_license: "License", fs_terms: "Terms",
-      legal_imprint: "Legal notice", legal_privacy: "Privacy", legal_contact: "Contact",
+      legal_imprint: "Legal notice", legal_privacy: "Privacy", legal_license: "License", legal_contact: "Contact",
       mb_note: "Our online reseller Moonbase is the merchant of record for all orders.",
       copyright: "© 2026 KOLO AUDIO. All rights reserved.",
       soon: "Coming soon"
@@ -71,7 +71,7 @@ window.KOLO.text.de = Object.assign({}, window.KOLO.text.en, {
   a_1: "KOLO AUDIO ist ein unabhängiges Plugin-Studio aus dem Norden Deutschlands, gegründet von Kim Joschua Arnold.",
   a_sig: "Kim Joschua Arnold, Sound, Design und Konzept",
   copyright: "© 2026 KOLO AUDIO. Alle Rechte vorbehalten.",
-  legal_contact: "Kontakt", legal_imprint: "Impressum", legal_privacy: "Datenschutz",
+  legal_contact: "Kontakt", legal_imprint: "Impressum", legal_privacy: "Datenschutz", legal_license: "Lizenzvertrag",
   mb_note: "Unser Online-Wiederverkäufer Moonbase ist Verkäufer (Merchant of Record) für alle Bestellungen.",
   menu_about: "Über uns", menu_manuals: "Manuals"
 });
