@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://koloaudio.com/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://koloaudio.com/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://koloaudio.com/de/"/>
+    <lastmod>2026-11-28</lastmod>
+  </url>
+  <url>
+    <loc>https://koloaudio.com/kolorit</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://koloaudio.com/kolorit"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://koloaudio.com/de/kolorit"/>
+    <lastmod>2026-11-28</lastmod>
+  </url>
+  <url>
+    <loc>https://koloaudio.com/grit</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://koloaudio.com/grit"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://koloaudio.com/de/grit"/>
+    <lastmod>2026-11-28</lastmod>
+  </url>
+  <url>
+    <loc>https://koloaudio.com/manual/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://koloaudio.com/manual/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://koloaudio.com/de/manual/"/>
+    <lastmod>2026-11-28</lastmod>
+  </url>
+  <url>
+    <loc>https://koloaudio.com/impressum</loc>
+    <lastmod>2026-11-28</lastmod>
+  </url>
+  <url>
+    <loc>https://koloaudio.com/datenschutz</loc>
+    <lastmod>2026-11-28</lastmod>
+  </url>
+  <url>
+    <loc>https://koloaudio.com/eula</loc>
+    <lastmod>2026-11-28</lastmod>
+  </url>
+  <url>
+    <loc>https://koloaudio.com/de/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://koloaudio.com/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://koloaudio.com/de/"/>
+    <lastmod>2026-11-28</lastmod>
+  </url>
+  <url>
+    <loc>https://koloaudio.com/de/kolorit</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://koloaudio.com/kolorit"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://koloaudio.com/de/kolorit"/>
+    <lastmod>2026-11-28</lastmod>
+  </url>
+  <url>
+    <loc>https://koloaudio.com/de/grit</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://koloaudio.com/grit"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://koloaudio.com/de/grit"/>
+    <lastmod>2026-11-28</lastmod>
+  </url>
+  <url>
+    <loc>https://koloaudio.com/de/manual/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://koloaudio.com/manual/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://koloaudio.com/de/manual/"/>
+    <lastmod>2026-11-28</lastmod>
+  </url>
+</urlset>
